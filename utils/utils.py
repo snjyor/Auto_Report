@@ -7,7 +7,7 @@ def log(message):
     :param message:
     :return: log info
     """
-    handlers = [logging.FileHandler("pandasai.log")]
+    handlers = [logging.FileHandler("ai_analysis.log")]
     logging.basicConfig(
         level=logging.INFO,
         format="%(asctime)s [%(levelname)s] %(message)s",
