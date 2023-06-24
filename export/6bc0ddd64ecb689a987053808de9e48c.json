@@ -1,0 +1,641 @@
+{
+  "animation": true,
+  "animationThreshold": 2000,
+  "animationDuration": 1000,
+  "animationEasing": "cubicOut",
+  "animationDelay": 0,
+  "animationDurationUpdate": 300,
+  "animationEasingUpdate": "cubicOut",
+  "animationDelayUpdate": 0,
+  "aria": {
+    "enabled": false
+  },
+  "color": [
+    "#5470c6",
+    "#91cc75",
+    "#fac858",
+    "#ee6666",
+    "#73c0de",
+    "#3ba272",
+    "#fc8452",
+    "#9a60b4",
+    "#ea7ccc"
+  ],
+  "series": [
+    {
+      "type": "scatter",
+      "symbolSize": 10,
+      "data": [
+        [
+          4.4,
+          105.8
+        ],
+        [
+          4.2,
+          106.7
+        ],
+        [
+          4.4,
+          106.7
+        ],
+        [
+          4.6,
+          105.8
+        ],
+        [
+          4.2,
+          102.6
+        ],
+        [
+          4.5,
+          101.6
+        ],
+        [
+          6.0,
+          100.7
+        ],
+        [
+          5.4,
+          97.4
+        ],
+        [
+          5.0,
+          93.9
+        ],
+        [
+          5.1,
+          94.5
+        ],
+        [
+          4.5,
+          93.8
+        ],
+        [
+          6.0,
+          94.9
+        ],
+        [
+          5.7,
+          93.8
+        ],
+        [
+          6.1,
+          95.5
+        ],
+        [
+          6.0,
+          96.1
+        ],
+        [
+          6.5,
+          97.2
+        ],
+        [
+          6.5,
+          97.3
+        ],
+        [
+          6.1,
+          99.0
+        ],
+        [
+          5.2,
+          100.5
+        ],
+        [
+          5.9,
+          103.2
+        ],
+        [
+          7.1,
+          106.4
+        ],
+        [
+          5.1,
+          106.6
+        ],
+        [
+          5.6,
+          109.0
+        ],
+        [
+          9.4,
+          114.7
+        ],
+        [
+          12.2,
+          118.9
+        ],
+        [
+          11.3,
+          119.1
+        ],
+        [
+          11.9,
+          120.3
+        ],
+        [
+          13.0,
+          121.6
+        ],
+        [
+          14.6,
+          123.5
+        ],
+        [
+          13.2,
+          121.4
+        ],
+        [
+          13.9,
+          120.6
+        ],
+        [
+          14.2,
+          119.4
+        ],
+        [
+          16.2,
+          120.1
+        ],
+        [
+          15.0,
+          119.4
+        ],
+        [
+          15.3,
+          120.6
+        ],
+        [
+          16.2,
+          121.7
+        ],
+        [
+          17.2,
+          123.4
+        ],
+        [
+          16.2,
+          126.2
+        ],
+        [
+          17.8,
+          131.7
+        ],
+        [
+          18.2,
+          134.7
+        ],
+        [
+          18.3,
+          136.4
+        ],
+        [
+          17.4,
+          139.0
+        ],
+        [
+          17.9,
+          142.5
+        ],
+        [
+          18.2,
+          145.1
+        ],
+        [
+          20.1,
+          148.4
+        ],
+        [
+          19.2,
+          149.9
+        ],
+        [
+          19.9,
+          150.6
+        ],
+        [
+          20.2,
+          151.1
+        ],
+        [
+          19.3,
+          150.0
+        ],
+        [
+          18.3,
+          150.8
+        ],
+        [
+          18.3,
+          147.4
+        ],
+        [
+          18.1,
+          146.1
+        ],
+        [
+          18.3,
+          144.1
+        ],
+        [
+          17.4,
+          146.2
+        ],
+        [
+          16.8,
+          146.4
+        ],
+        [
+          16.6,
+          145.4
+        ],
+        [
+          16.7,
+          143.2
+        ],
+        [
+          15.6,
+          145.0
+        ],
+        [
+          15.5,
+          145.9
+        ],
+        [
+          17.4,
+          146.7
+        ],
+        [
+          19.6,
+          144.9
+        ],
+        [
+          18.9,
+          146.1
+        ],
+        [
+          18.0,
+          144.7
+        ],
+        [
+          17.4,
+          143.0
+        ],
+        [
+          17.2,
+          141.2
+        ],
+        [
+          17.0,
+          155.7
+        ],
+        [
+          17.3,
+          167.1
+        ],
+        [
+          17.9,
+          172.2
+        ],
+        [
+          17.7,
+          172.9
+        ],
+        [
+          16.9,
+          176.4
+        ],
+        [
+          17.0,
+          178.9
+        ],
+        [
+          16.9,
+          180.6
+        ],
+        [
+          16.6,
+          180.7
+        ],
+        [
+          16.0,
+          179.8
+        ],
+        [
+          15.8,
+          179.8
+        ],
+        [
+          15.4,
+          178.1
+        ],
+        [
+          14.9,
+          177.5
+        ],
+        [
+          14.5,
+          181.4
+        ],
+        [
+          14.5,
+          185.0
+        ],
+        [
+          14.6,
+          188.8
+        ],
+        [
+          14.4,
+          190.4
+        ],
+        [
+          14.1,
+          196.2
+        ],
+        [
+          14.5,
+          200.6
+        ],
+        [
+          14.7,
+          203.8
+        ],
+        [
+          14.7,
+          205.2
+        ],
+        [
+          14.3,
+          211.0
+        ],
+        [
+          14.4,
+          215.8
+        ],
+        [
+          14.6,
+          215.8
+        ],
+        [
+          14.9,
+          217.2
+        ],
+        [
+          14.6,
+          213.4
+        ],
+        [
+          14.8,
+          221.4
+        ],
+        [
+          15.2,
+          225.4
+        ],
+        [
+          15.5,
+          227.6
+        ],
+        [
+          15.3,
+          232.9
+        ],
+        [
+          15.7,
+          235.7
+        ],
+        [
+          16.1,
+          237.6
+        ],
+        [
+          16.1,
+          238.6
+        ],
+        [
+          15.7,
+          241.6
+        ],
+        [
+          15.9,
+          242.0
+        ],
+        [
+          16.0,
+          242.4
+        ],
+        [
+          16.2,
+          241.2
+        ],
+        [
+          15.8,
+          241.8
+        ],
+        [
+          15.8,
+          240.4
+        ],
+        [
+          16.0,
+          240.8
+        ],
+        [
+          16.3,
+          238.9
+        ],
+        [
+          16.0,
+          244.9
+        ],
+        [
+          16.2,
+          245.6
+        ],
+        [
+          16.5,
+          246.5
+        ],
+        [
+          17.0,
+          246.6
+        ],
+        [
+          17.4,
+          260.9
+        ],
+        [
+          18.1,
+          268.0
+        ],
+        [
+          19.4,
+          271.7
+        ],
+        [
+          20.6,
+          270.9
+        ],
+        [
+          19.9,
+          268.3
+        ],
+        [
+          19.7,
+          265.8
+        ],
+        [
+          19.9,
+          265.1
+        ],
+        [
+          20.3,
+          262.8
+        ],
+        [
+          19.9,
+          267.3
+        ],
+        [
+          20.2,
+          271.9
+        ],
+        [
+          20.9,
+          272.7
+        ],
+        [
+          21.4,
+          273.1
+        ],
+        [
+          21.4,
+          281.8
+        ]
+      ],
+      "label": {
+        "show": false,
+        "margin": 8
+      },
+      "itemStyle": {
+        "color": "purple"
+      }
+    }
+  ],
+  "legend": [
+    {
+      "data": [
+        ""
+      ],
+      "selected": {},
+      "show": true,
+      "padding": 5,
+      "itemGap": 10,
+      "itemWidth": 25,
+      "itemHeight": 14,
+      "backgroundColor": "transparent",
+      "borderColor": "#ccc",
+      "borderWidth": 1,
+      "borderRadius": 0,
+      "pageButtonItemGap": 5,
+      "pageButtonPosition": "end",
+      "pageFormatter": "{current}/{total}",
+      "pageIconColor": "#2f4554",
+      "pageIconInactiveColor": "#aaa",
+      "pageIconSize": 15,
+      "animationDurationUpdate": 800,
+      "selector": false,
+      "selectorPosition": "auto",
+      "selectorItemGap": 7,
+      "selectorButtonGap": 10
+    }
+  ],
+  "tooltip": {
+    "show": true,
+    "trigger": "item",
+    "triggerOn": "mousemove|click",
+    "axisPointer": {
+      "type": "line"
+    },
+    "showContent": true,
+    "alwaysShowContent": false,
+    "showDelay": 0,
+    "hideDelay": 100,
+    "enterable": false,
+    "confine": false,
+    "appendToBody": false,
+    "transitionDuration": 0.4,
+    "textStyle": {
+      "fontSize": 14
+    },
+    "borderWidth": 0,
+    "padding": 5,
+    "order": "seriesAsc"
+  },
+  "xAxis": [
+    {
+      "type": "value",
+      "name": "政府部门占比",
+      "show": true,
+      "scale": false,
+      "nameLocation": "end",
+      "nameGap": 15,
+      "gridIndex": 0,
+      "inverse": false,
+      "offset": 0,
+      "splitNumber": 5,
+      "minInterval": 0,
+      "splitLine": {
+        "show": true,
+        "lineStyle": {
+          "show": true,
+          "width": 1,
+          "opacity": 1,
+          "curveness": 0,
+          "type": "solid"
+        }
+      },
+      "data": null
+    }
+  ],
+  "yAxis": [
+    {
+      "type": "value",
+      "name": "实体经济部门占比",
+      "show": true,
+      "scale": false,
+      "nameLocation": "end",
+      "nameGap": 15,
+      "gridIndex": 0,
+      "inverse": false,
+      "offset": 0,
+      "splitNumber": 5,
+      "minInterval": 0,
+      "splitLine": {
+        "show": true,
+        "lineStyle": {
+          "show": true,
+          "width": 1,
+          "opacity": 1,
+          "curveness": 0,
+          "type": "solid"
+        }
+      }
+    }
+  ],
+  "title": [
+    {
+      "show": true,
+      "text": "政府部门占比与实体经济部门占比关系散点图",
+      "target": "blank",
+      "subtarget": "blank",
+      "padding": 5,
+      "itemGap": 10,
+      "textAlign": "auto",
+      "textVerticalAlign": "auto",
+      "triggerEvent": false
+    }
+  ]
+}

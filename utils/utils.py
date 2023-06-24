@@ -1,6 +1,8 @@
 import logging
-from configs import configs as cfg
+from regex import regex
 import openai
+
+from configs import configs as cfg
 
 
 def log(message):
@@ -63,3 +65,28 @@ def str_to_list_by(sentence, split="\n"):
     """
     return [i for i in sentence.split(split) if i.strip()]
 
+
+def md5(text):
+    """
+    Get md5 of a text
+    :param text: text
+    :return: md5 of the text
+    """
+    import hashlib
+    return hashlib.md5(text.encode()).hexdigest()
+
+
+def json_regex(text):
+    """
+    extract json data from a text
+    :param text: text
+    :return: json string
+    """
+    try:
+        json_pattern = regex.compile(r"\{(?:[^{}]|(?R))*\}")
+        json_match = json_pattern.search(text)
+        json_string = json_match.group(0)
+    except Exception as err:
+        print(f"json_regex error: {err}")
+        json_string = ""
+    return json_string

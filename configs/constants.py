@@ -1,67 +1,12 @@
 
+START_CODE_TAG = "<startCode>"
+END_CODE_TAG = "<endCode>"
 
-WHITELISTED_BUILTINS = [
-    "abs",
-    "all",
-    "any",
-    "ascii",
-    "bin",
-    "bool",
-    "bytearray",
-    "bytes",
-    "callable",
-    "chr",
-    "classmethod",
-    "complex",
-    "delattr",
-    "dict",
-    "dir",
-    "divmod",
-    "enumerate",
-    "filter",
-    "float",
-    "format",
-    "frozenset",
-    "getattr",
-    "hasattr",
-    "hash",
-    "help",
-    "hex",
-    "id",
-    "input",
-    "int",
-    "isinstance",
-    "issubclass",
-    "iter",
-    "len",
-    "list",
-    "locals",
-    "map",
-    "max",
-    "memoryview",
-    "min",
-    "next",
-    "object",
-    "oct",
-    "open",
-    "ord",
-    "pow",
-    "print",
-    "property",
-    "range",
-    "repr",
-    "reversed",
-    "round",
-    "set",
-    "setattr",
-    "slice",
-    "sorted",
-    "staticmethod",
-    "str",
-    "sum",
-    "super",
-    "tuple",
-    "type",
-    "vars",
-    "zip",
-]
+SUGGESTION_START = "<suggestion>"
+SUGGESTION_END = "</suggestion>"
+
+START_DESCRIPTION_TAG = "<startDescription>"
+END_DESCRIPTION_TAG = "</endDescription>"
+
+CHARTS_EXPORT_PATH = "export"
+
