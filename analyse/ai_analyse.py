@@ -17,6 +17,7 @@ sys.path.append(str(ABS_PATH))
 from utils import utils
 from prompts import Prompts
 from configs.constants import CHARTS_EXPORT_PATH, START_CODE_TAG, END_CODE_TAG, SUGGESTION_START, SUGGESTION_END
+from stats_data import get_stats_data
 
 
 class AIAnalyse:
@@ -55,28 +56,25 @@ class AIAnalyse:
                     self.save_charts_json(json_str_result)
                     print(f"图表已保存至{CHARTS_EXPORT_PATH}")
                 if charts_description:
-                    stats_data = self.get_stats_data(json_str_result)
-                    description_prompt = self.prompts.generate_charts_description_prompt(stats_data)
+                    stats_data = get_stats_data(json_str_result)
+                    description_prompt = self.prompts.generate_charts_description_prompt(**stats_data)
                 yield json_str_result
             except Exception as e:
                 print(f"Unable to run code for suggestion: {each_suggestion}, error: {e}")
                 continue
 
-    # def __call__(self,
-    #              data_frame: pd.DataFrame,
-    #              save_charts: Optional[bool] = True,
-    #              show_code: Optional[bool] = False
-    #              ):
-    #     return self.run(
-    #         data_frame=data_frame,
-    #         save_charts=save_charts,
-    #         show_code=show_code
-    #     )
-
-    def get_stats_data(self, json_str_result):
-        json_result = json.loads(json_str_result)
-        stats_data = json_result.get("stats_data", {})
-        return stats_data
+    def __call__(self,
+                 data_frame: pd.DataFrame,
+                 save_charts: Optional[bool] = True,
+                 show_code: Optional[bool] = False,
+                 charts_description: Optional[bool] = True
+                 ):
+        return self.run(
+            data_frame=data_frame,
+            save_charts=save_charts,
+            show_code=show_code,
+            charts_description=charts_description
+        )
 
     def generate_code(self, prompt: str):
         code_response = utils.gpt(prompt)
@@ -241,13 +239,9 @@ class AIAnalyse:
         except SyntaxError:
             return False
 
-# client = AIAnalyse()
-# df = pd.read_csv(os.path.join(ABS_PATH, "test/data/as_macro_cnbs.csv"), index_col=0)
-# generater = client.run(data_frame=df)
-
 
 if __name__ == '__main__':
-    # client = AIAnalyse()
+    client = AIAnalyse()
     # df = pd.read_csv(os.path.join(ABS_PATH, "test/data/as_macro_cnbs.csv"), index_col=0)
     # generater = client.run(data_frame=df)
     # for item in generater:
@@ -256,4 +250,6 @@ if __name__ == '__main__':
     for root, path, names in os.walk(os.path.join(ABS_PATH, "export")):
         for name in names:
             with open(os.path.join(root, name), "r") as f:
-                content = json.loads(f.read())
+                content = f.read()
+            client.get_stats_data(content)
+            print()

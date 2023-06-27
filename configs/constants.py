@@ -10,3 +10,5 @@ END_DESCRIPTION_TAG = "</endDescription>"
 
 CHARTS_EXPORT_PATH = "export"
 
+DATA_DETAIL_LIMIT = 30
+
