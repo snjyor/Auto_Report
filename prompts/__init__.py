@@ -42,14 +42,14 @@ class Prompts:
         self._args.update(error_message)
         return (self.base_prompt + "用户给的画图建议是：```{suggestion}```，你生成的python 代码如下：```{code}```, 这段代码执行后报错信息如下：```{error_returned}```，请纠正这段代码并返回一段新代码(不要导入任何库)以修复上面提到的错误，不要再生成一样的代码，确保代码前面以{START_CODE_TAG}开头，以{END_CODE_TAG}结束").format(**self._args)
 
-    def generate_charts_description_prompt(self, data: pd.DataFrame):
+    def generate_charts_description_prompt(self, **kwargs):
         charts_description_dict = {
-            "data": data,
-            "START_DESCRIPTION_TAG": START_DESCRIPTION_TAG,
-            "END_DESCRIPTION_TAG": END_DESCRIPTION_TAG
+            "DESCRIPTION_START": DESCRIPTION_START,
+            "DESCRIPTION_END": DESCRIPTION_END
         }
+        charts_description_dict.update(kwargs)
         self._args.update(charts_description_dict)
-        return "现在我有一份聚合处理过的数据：\n```{data}```,\n我需要你对这份数据进行分析解释，分析内容包括：数据的基本信息，数据的特点，数据的问题，数据的含义及其解释，你需要将你的描述放在{START_CODE_TAG}和{END_CODE_TAG}之间，以便我能够找到你的描述。".format(**self._args)
+        return "现在我有一份图表数据，该图表的类型为：`{charts_type}`, 标题为：`{title}`，其X轴名为：`{x_names}`,Y轴名为：`{y_names}`,\n这份图表的图例和对应的数据如下所示：```{name_data_mapping}```, \n这份图表数据的描述性信息pandas dataframe如下所示：```{describe_df}```，\n我需要你对这份图表数据进行总结性分析描述，让我看到你的描述就知道这份图表表明的是什么意思。你需要将你的描述放在{DESCRIPTION_START}和{DESCRIPTION_END}之间，以便我能够找到你的描述。".format(**self._args)
 
 
 

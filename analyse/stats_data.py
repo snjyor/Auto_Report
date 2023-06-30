@@ -152,9 +152,9 @@ class StatsData:
 
 get_stats_data = StatsData()
 
-for root, path, names in os.walk(os.path.join(ABS_PATH, "export")):
-    for name in names:
-        with open(os.path.join(root, name), "r") as f:
-            content = f.read()
-        result = get_stats_data(content)
-        print(result)
+# for root, path, names in os.walk(os.path.join(ABS_PATH, "export")):
+#     for name in names:
+#         with open(os.path.join(root, name), "r") as f:
+#             content = f.read()
+#         result = get_stats_data(content)
+#         print(result)

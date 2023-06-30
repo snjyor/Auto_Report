@@ -5,8 +5,8 @@ END_CODE_TAG = "<endCode>"
 SUGGESTION_START = "<suggestion>"
 SUGGESTION_END = "</suggestion>"
 
-START_DESCRIPTION_TAG = "<startDescription>"
-END_DESCRIPTION_TAG = "</endDescription>"
+DESCRIPTION_START = "<startDescription>"
+DESCRIPTION_END = "<endDescription>"
 
 CHARTS_EXPORT_PATH = "export"
 

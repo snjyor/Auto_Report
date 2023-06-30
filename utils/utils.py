@@ -1,7 +1,9 @@
 import logging
+
+import tiktoken
 from regex import regex
 import openai
-
+from with_timeout import with_timeout
 from configs import configs as cfg
 
 
@@ -21,9 +23,28 @@ def log(message):
     return logging.getLogger(__name__).info(message)
 
 
+def choose_better_engine(token_usage):
+    """
+    Choose a better engine
+    :param token_usage: token usage
+    :return: engine
+    """
+    better_engines = ["gpt4-8k", "gpt4-32k"]
+    for each in better_engines:
+        if cfg.ENGINE_TOKENS_MAPPING.get(each) > token_usage:
+            cfg.AZURE_GPT_ENGINE = each
+            cfg.MAX_TOKENS = cfg.ENGINE_TOKENS_MAPPING.get(cfg.AZURE_GPT_ENGINE)
+            break
+
+
+# @with_timeout(30)
 def gpt(message):
     if isinstance(message, str):
         message = [add_message(message=message, role="user")]
+    token_usage = token_usage_from_messages(message)
+    if token_usage > cfg.MAX_TOKENS:
+        choose_better_engine(token_usage)
+
     if cfg.USE_AZURE_AI:
         response = openai.ChatCompletion.create(
             engine=cfg.AZURE_GPT_ENGINE,
@@ -90,3 +111,46 @@ def json_regex(text):
         print(f"json_regex error: {err}")
         json_string = ""
     return json_string
+
+
+def get_now_timestamp():
+    """
+    Get now timestamp
+    :return: timestamp
+    """
+    import time
+    return int(time.time())
+
+
+def token_usage(text):
+    encoding = tiktoken.encoding_for_model("gpt-3.5-turbo")
+    return len(encoding.encode(text))
+
+
+def token_usage_from_messages(messages, model="gpt35"):
+    mapping = {
+        "gpt35": "gpt-3.5-turbo-0301",
+        "gpt4-8k": "gpt-4-0314",
+        "gpt4-32k": "gpt-4-0314",
+    }
+    encoding = tiktoken.encoding_for_model(mapping.get(model, model))
+    if real_model := mapping.get(model):
+        return token_usage_from_messages(messages, real_model)
+    elif model == "gpt-3.5-turbo-0301":
+        tokens_per_message = 4  # every message follows <|start|>{role/name}\n{content}<|end|>\n
+        tokens_per_name = -1  # if there's a name, the role is omitted
+    elif model == "gpt-4-0314":
+        tokens_per_message = 3
+        tokens_per_name = 1
+    else:
+        raise NotImplementedError(f"""num_tokens_from_messages() is not implemented for model {model}. See https://github.com/openai/openai-python/blob/main/chatml.md for information on how messages are converted to tokens.""")
+    num_tokens = 0
+    for message in messages:
+        num_tokens += tokens_per_message
+        for key, value in message.items():
+            num_tokens += len(encoding.encode(value))
+            if key == "name":
+                num_tokens += tokens_per_name
+    num_tokens += 3  # every reply is primed with <|start|>assistant<|message|>
+    return num_tokens
+

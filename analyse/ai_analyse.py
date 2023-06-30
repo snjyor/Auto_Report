@@ -16,7 +16,7 @@ sys.path.append(str(ABS_PATH))
 
 from utils import utils
 from prompts import Prompts
-from configs.constants import CHARTS_EXPORT_PATH, START_CODE_TAG, END_CODE_TAG, SUGGESTION_START, SUGGESTION_END
+from configs.constants import *
 from stats_data import get_stats_data
 
 
@@ -58,7 +58,11 @@ class AIAnalyse:
                 if charts_description:
                     stats_data = get_stats_data(json_str_result)
                     description_prompt = self.prompts.generate_charts_description_prompt(**stats_data)
-                yield json_str_result
+                    description_response = utils.gpt(description_prompt)
+                    print(f"图表描述：{description_response}")
+                    descriptions = self._get_description(description_response)
+                    print(f"图表描述：{descriptions}")
+                yield json_str_result, descriptions
             except Exception as e:
                 print(f"Unable to run code for suggestion: {each_suggestion}, error: {e}")
                 continue
@@ -66,7 +70,7 @@ class AIAnalyse:
     def __call__(self,
                  data_frame: pd.DataFrame,
                  save_charts: Optional[bool] = True,
-                 show_code: Optional[bool] = False,
+                 show_code: Optional[bool] = True,
                  charts_description: Optional[bool] = True
                  ):
         return self.run(
@@ -105,7 +109,8 @@ class AIAnalyse:
     def save_charts_json(self, json_str: str = None, folder_name: str = None):
         if not json_str:
             raise ValueError("Please provide a valid json string")
-        file_name = utils.md5(json_str)
+        json_data = json.loads(json_str)
+        file_name = json_data.get("title", [{}])[0].get("text", utils.md5(json_str)).replace("/", "_").replace("\\", "_")
         if folder_name:
             if not os.path.exists(folder_name):
                 os.mkdir(folder_name)
@@ -115,7 +120,7 @@ class AIAnalyse:
                 os.mkdir(CHARTS_EXPORT_PATH)
             export_path = os.path.join(ABS_PATH, f"{CHARTS_EXPORT_PATH}/{file_name}.json")
         with open(export_path, "w") as f:
-            f.write(json.dumps(json.loads(json_str), indent=2, ensure_ascii=False))
+            f.write(json.dumps(json_data, indent=2, ensure_ascii=False))
 
     def run_code(self, code: str, data_frame: pd.DataFrame, use_error_correction_framework: bool = False) -> str:
         """
@@ -138,6 +143,7 @@ class AIAnalyse:
             {code_to_run}
             ```"""
         )
+        data_frame.reset_index(drop=False, inplace=True)
         environment = {name: getattr(__builtins__, name) for name in dir(__builtins__) if not name.startswith("_")}
         environment.update({
             "pd": pd,
@@ -200,11 +206,17 @@ class AIAnalyse:
     def _get_suggestion(self, gpt_response: str) -> str:
         gpt_response = gpt_response.replace("\n", "")
         suggestion_pattern = regex.compile(rf"{SUGGESTION_START}(.*?){SUGGESTION_END}")
-        # match = suggestion_pattern.search(suggestion)
         suggestions = suggestion_pattern.findall(gpt_response)
-        # if match:
-        #     suggestion = match.group(1).strip()
         return suggestions
+
+    def _get_description(self, description_response):
+        description_pattern = regex.compile(rf"{DESCRIPTION_START}([\s\S]*?)({DESCRIPTION_END}|{DESCRIPTION_END.replace('<','</')})", re.DOTALL)
+        descriptions = description_pattern.search(description_response)
+        if descriptions:
+            descriptions = descriptions.group(1).strip()
+        else:
+            descriptions = description_response
+        return descriptions
 
     def _polish_code(self, code: str) -> str:
         """
@@ -242,14 +254,14 @@ class AIAnalyse:
 
 if __name__ == '__main__':
     client = AIAnalyse()
-    # df = pd.read_csv(os.path.join(ABS_PATH, "test/data/as_macro_cnbs.csv"), index_col=0)
-    # generater = client.run(data_frame=df)
-    # for item in generater:
-    #     print()
-    # print()
-    for root, path, names in os.walk(os.path.join(ABS_PATH, "export")):
-        for name in names:
-            with open(os.path.join(root, name), "r") as f:
-                content = f.read()
-            client.get_stats_data(content)
-            print()
+    df = pd.read_csv(os.path.join(ABS_PATH, "test/data/as_macro_cnbs.csv"), index_col=0)
+    generater = client(data_frame=df)
+    for item in generater:
+        print()
+    print()
+    # for root, path, names in os.walk(os.path.join(ABS_PATH, "export")):
+    #     for name in names:
+    #         with open(os.path.join(root, name), "r") as f:
+    #             content = f.read()
+    #         client.get_stats_data(content)
+    #         print()
