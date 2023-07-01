@@ -44,8 +44,8 @@ def markdown_to_pdf():
 
 
 if __name__ == '__main__':
-    # client = AiDataAnalysisFrontend()
+    client = AiDataAnalysisFrontend()
     # client.save_pdf()
-    markdown_to_pdf()
-    # client.draw_page()
+    # markdown_to_pdf()
+    client.draw_page()
     print("Done!")
