@@ -1,8 +1,7 @@
-tiktoken~=0.3.2
-openai~=0.27.8
-regex~=2022.6.2
-pandas~=1.5.3
-dash~=2.9.3
-astor~=0.8.1
-pyecharts~=2.0.3
-streamlit~=1.10.0
+tiktoken
+openai
+regex
+pandas
+astor
+pyecharts
+streamlit
