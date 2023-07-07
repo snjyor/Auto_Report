@@ -17,14 +17,7 @@ st.set_page_config(page_title="AIAnalysis", page_icon="🧊", layout="wide")
 st.sidebar.button("Upload File")
 
 def draw_page():
-    for root, path, names in os.walk(os.path.join(ABS_PATH, "export")):
-        for name in names:
-            time.sleep(0.3)
-            with open(os.path.join(root, name), "r") as f:
-                content = json.loads(f.read())
-            st_echarts(options=content)
-            text = st.text_area("The data is from the file: ", value=name)
-            st.write(text)
+    st.write("YES")
 
 
 # def markdown_to_pdf():
