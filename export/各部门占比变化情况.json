@@ -4265,7 +4265,17 @@
           "type": "solid"
         }
       },
-      "data": null
+      "data": [
+        "2015",
+        "2016",
+        "2017",
+        "2018",
+        "2019",
+        "2020",
+        "2021",
+        "2022",
+        "2023"
+      ]
     }
   ],
   "yAxis": [
@@ -4298,7 +4308,7 @@
       "text": "各部门占比变化情况",
       "target": "blank",
       "subtarget": "blank",
-      "left": "center",
+      "left": "left",
       "padding": 5,
       "itemGap": 10,
       "textAlign": "auto",

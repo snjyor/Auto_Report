@@ -6,18 +6,24 @@ from pathlib import Path
 import streamlit as st
 from streamlit_echarts import st_echarts
 
-# ABS_PATH = Path(__file__).parent.absolute()
-# sys.path.append(str(ABS_PATH))
+ABS_PATH = Path(__file__).parent.absolute()
+sys.path.append(str(ABS_PATH))
 
 
-# class AiDataAnalysisFrontend:
-#     def __init__(self):
-st.markdown('AI Data Analysis', unsafe_allow_html=True)
-# st.set_page_config(page_title="AIAnalysis", page_icon="🧊", layout="wide")
-# st.sidebar.button("Upload File")
+class AiDataAnalysisFrontend:
+    def __init__(self):
+        st.set_page_config(page_title="Auto Data Vision", page_icon="🧊", layout="wide")
+        st.markdown('<h1 style="text-align: center;">AI Data Analysis</h1>', unsafe_allow_html=True)
 
-def draw_page():
-    st.write("YES")
+    def draw_page(self):
+        for root, path, names in os.walk(os.path.join(ABS_PATH, "export")):
+            for name in names:
+                with open(os.path.join(root, name), "r") as f:
+                    content = f.read()
+                    option = json.loads(content)
+                    st_echarts(option, height="600px", width="100%")
+                    st.write(root, path, name)
+                    time.sleep(1)
 
 
 # def markdown_to_pdf():
@@ -37,9 +43,9 @@ def draw_page():
 
 
 if __name__ == '__main__':
-    # client = AiDataAnalysisFrontend()
+    client = AiDataAnalysisFrontend()
     # client.save_pdf()
     # markdown_to_pdf()
-    # client.draw_page()
+    client.draw_page()
     # print("Done!")
-    draw_page()
+

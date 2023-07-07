@@ -4418,7 +4418,7 @@
       "text": "各部门随时间的变化趋势",
       "target": "blank",
       "subtarget": "blank",
-      "left": "center",
+      "left": "left",
       "padding": 5,
       "itemGap": 10,
       "textAlign": "auto",
