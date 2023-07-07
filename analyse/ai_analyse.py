@@ -62,6 +62,8 @@ class AIAnalyse:
                     print(f"图表描述：{description_response}")
                     descriptions = self._get_description(description_response)
                     print(f"图表描述：{descriptions}")
+                else:
+                    descriptions = ""
                 yield json_str_result, descriptions
             except Exception as e:
                 print(f"Unable to run code for suggestion: {each_suggestion}, error: {e}")
@@ -258,7 +260,7 @@ if __name__ == '__main__':
     generater = client(data_frame=df)
     for item in generater:
         print()
-    print()
+    print("DDDDDONEEEE!!!")
     # for root, path, names in os.walk(os.path.join(ABS_PATH, "export")):
     #     for name in names:
     #         with open(os.path.join(root, name), "r") as f:
