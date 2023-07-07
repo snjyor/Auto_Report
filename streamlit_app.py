@@ -6,15 +6,15 @@ from pathlib import Path
 import streamlit as st
 from streamlit_echarts import st_echarts
 
-ABS_PATH = Path(__file__).parent.absolute()
-sys.path.append(str(ABS_PATH))
+# ABS_PATH = Path(__file__).parent.absolute()
+# sys.path.append(str(ABS_PATH))
 
 
 # class AiDataAnalysisFrontend:
 #     def __init__(self):
 st.markdown('AI Data Analysis', unsafe_allow_html=True)
-st.set_page_config(page_title="AIAnalysis", page_icon="🧊", layout="wide")
-st.sidebar.button("Upload File")
+# st.set_page_config(page_title="AIAnalysis", page_icon="🧊", layout="wide")
+# st.sidebar.button("Upload File")
 
 def draw_page():
     st.write("YES")
