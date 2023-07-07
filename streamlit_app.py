@@ -22,7 +22,7 @@ class AiDataAnalysisFrontend:
                     content = f.read()
                     option = json.loads(content)
                     st_echarts(option, height="600px", width="100%")
-                    st.write(root, path, name)
+                    st.write(name.split(".")[0])
                     time.sleep(1)
 
 
