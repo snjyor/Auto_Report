@@ -12,7 +12,7 @@ sys.path.append(str(ABS_PATH))
 
 class AiDataAnalysisFrontend:
     def __init__(self):
-        st.set_page_config(page_title="Auto Data Vision", page_icon="🧊", layout="wide")
+        st.set_page_config(page_title="Auto Data Analysis", page_icon="📊", layout="wide")
         st.markdown('<h1 style="text-align: center;">AI Data Analysis</h1>', unsafe_allow_html=True)
 
     def draw_page(self):
