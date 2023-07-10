@@ -25,6 +25,20 @@ class AiDataAnalysisFrontend:
                     st.write(name.split(".")[0])
                     time.sleep(1)
 
+    def report_demo(self):
+        with st.spinner("正在根据您的数据生成数据分析建议……"):
+            time.sleep(2)
+        with open(os.path.join(ABS_PATH, "analyse", "report.json"), "r") as f:
+            suggestions = json.loads(f.read())
+        for suggestion in suggestions:
+            with st.spinner(f"正在根据建议：<{suggestion.get('suggestion')}>生成数据分析图表……"):
+                time.sleep(2)
+                st.write(f"图表：{suggestion.get('title')}绘制完成！")
+            with st.spinner(f"正在根据数据图表总结描述信息……"):
+                time.sleep(2)
+                st.write(f"{suggestion.get('description')}")
+            st.success(f"<{suggestion.get('suggestion')}>:完成分析")
+        st.success("数据分析完成")
 
 # def markdown_to_pdf():
 #     import markdown
@@ -46,6 +60,7 @@ if __name__ == '__main__':
     client = AiDataAnalysisFrontend()
     # client.save_pdf()
     # markdown_to_pdf()
-    client.draw_page()
+    # client.draw_page()
+    client.report_demo()
     # print("Done!")
 

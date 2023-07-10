@@ -735,3 +735,678 @@ line.set_global_opts(title_opts=opts.TitleOpts(title='各部门随时间的变�
 line_json = line.dump_options_with_quotes()
 print(line_json)
             ```
+2023-07-08 13:41:01 [INFO] 
+            Code running:
+            ```
+            import pandas as pd
+from pyecharts.charts import Line
+from pyecharts import options as opts
+df = df
+df['年份'] = pd.to_datetime(df['年份'])
+df = df
+columns = df.columns.tolist()[1:]
+units = ['亿元'] * len(columns)
+df.columns = pd.MultiIndex.from_arrays([columns, units])
+df = df
+df.columns = ['年份', '部门', '单位', '金额']
+line = Line()
+line.set_global_opts(title_opts=opts.TitleOpts(title='各部门资产和负债情况', pos_left
+    ='center'), tooltip_opts=opts.TooltipOpts(trigger='axis',
+    axis_pointer_type='cross'), yaxis_opts=opts.AxisOpts(name='金额（亿元）'),
+    xaxis_opts=opts.AxisOpts(type_='time', name='年份'))
+for dept in columns:
+    data = df[df['部门'] == dept]
+    line.add_xaxis(data['年份'].tolist())
+    line.add_yaxis(dept, data['金额'].tolist(), is_smooth=True)
+print(line.dump_options())
+            ```
+2023-07-08 13:42:35 [INFO] 
+            Code running:
+            ```
+            import pandas as pd
+from pyecharts import options as opts
+from pyecharts.charts import Line
+df = df
+df['年份'] = pd.to_datetime(df['年份'])
+df = df
+line = Line().add_xaxis(df.index.tolist()).add_yaxis('居民部门', df['居民部门'].
+    tolist()).add_yaxis('非金融企业部门', df['非金融企业部门'].tolist()).add_yaxis('政府部门',
+    df['政府部门'].tolist()).add_yaxis('中央政府', df['中央政府'].tolist()).add_yaxis(
+    '地方政府', df['地方政府'].tolist()).add_yaxis('实体经济部门', df['实体经济部门'].tolist()
+    ).add_yaxis('金融部门资产方', df['金融部门资产方'].tolist()).add_yaxis('金融部门负债方', df[
+    '金融部门负债方'].tolist()).set_global_opts(title_opts=opts.TitleOpts(title=
+    '各部门资产趋势变化', pos_left='center'), yaxis_opts=opts.AxisOpts(name='资产数值'),
+    xaxis_opts=opts.AxisOpts(name='时间'))
+echarts_json = line.dump_options_with_quotes()
+print(echarts_json)
+            ```
+2023-07-08 13:42:58 [INFO] 
+            Code running:
+            ```
+            import pandas as pd
+from pyecharts.charts import Bar
+from pyecharts import options as opts
+df = df
+
+
+def stack_bar(year):
+    bar = Bar().add_xaxis(df['年份'].tolist()).add_yaxis('居民部门', df['居民部门'].
+        tolist(), stack='stack_1').add_yaxis('非金融企业部门', df['非金融企业部门'].
+        tolist(), stack='stack_1').add_yaxis('政府部门', df['政府部门'].tolist(),
+        stack='stack_1').add_yaxis('中央政府', df['中央政府'].tolist(), stack='stack_2'
+        ).add_yaxis('地方政府', df['地方政府'].tolist(), stack='stack_2').add_yaxis(
+        '实体经济部门', df['实体经济部门'].tolist(), stack='stack_2').add_yaxis('金融部门资产方',
+        df['金融部门资产方'].tolist(), stack='stack_3').add_yaxis('金融部门负债方', df[
+        '金融部门负债方'].tolist(), stack='stack_3').set_global_opts(title_opts=
+        opts.TitleOpts(title='各部门资产占比情况', pos_left='center'), xaxis_opts=
+        opts.AxisOpts(name='年份', axislabel_opts=opts.LabelOpts(rotate=-45)),
+        yaxis_opts=opts.AxisOpts(name='资产占比', axislabel_opts=opts.LabelOpts
+        (formatter='{value}%')), legend_opts=opts.LegendOpts(pos_left='left'))
+    return bar
+
+
+bar = stack_bar(df['年份'].tolist())
+echarts_json = bar.dump_options_with_quotes()
+print(echarts_json)
+            ```
+2023-07-08 13:43:21 [INFO] 
+            Code running:
+            ```
+            import pandas as pd
+from pyecharts.charts import Line
+from pyecharts import options as opts
+df = df
+df['年份'] = pd.to_datetime(df['年份'])
+df = df
+line = Line()
+line.add_xaxis(df.index.tolist())
+line.add_yaxis('金融部门资产方', df['金融部门资产方'].tolist(), yaxis_index=0)
+line.add_yaxis('金融部门负债方', df['金融部门负债方'].tolist(), yaxis_index=1)
+line.set_global_opts(yaxis_opts=opts.AxisOpts(axislabel_opts=opts.LabelOpts
+    (formatter='{value} 亿元')), yaxis_opts=[opts.AxisOpts(name='金融部门资产方',
+    type_='value', axislabel_opts=opts.LabelOpts(formatter='{value} 亿元')),
+    opts.AxisOpts(name='金融部门负债方', type_='value', axislabel_opts=opts.
+    LabelOpts(formatter='{value} 亿元'))], title_opts=opts.TitleOpts(title=
+    '金融部门资产方和负债方趋势变化', pos_left='center'))
+echarts_json = line.render_embed()
+print(echarts_json)
+            ```
+2023-07-08 13:49:47 [INFO] 
+            Code running:
+            ```
+            import pandas as pd
+from pyecharts.charts import Line
+from pyecharts import options as opts
+df = df
+df['年份'] = pd.to_datetime(df['年份'])
+df.set_index('年份', inplace=True)
+line = Line()
+line.set_global_opts(title_opts=opts.TitleOpts(title='各部门占比变化情况', pos_left=
+    'center'), xaxis_opts=opts.AxisOpts(name='年份'), yaxis_opts=opts.
+    AxisOpts(name='占比（%）'))
+line.add_xaxis(df.index.strftime('%Y-%m').tolist())
+line.add_yaxis('居民部门', df['居民部门'].tolist(), is_smooth=True, areastyle_opts=
+    opts.AreaStyleOpts(opacity=0.5))
+line.add_yaxis('非金融企业部门', df['非金融企业部门'].tolist(), is_smooth=True,
+    areastyle_opts=opts.AreaStyleOpts(opacity=0.5))
+line.add_yaxis('政府部门', df['政府部门'].tolist(), is_smooth=True, areastyle_opts=
+    opts.AreaStyleOpts(opacity=0.5))
+line.add_yaxis('中央政府', df['中央政府'].tolist(), is_smooth=True, areastyle_opts=
+    opts.AreaStyleOpts(opacity=0.5))
+line.add_yaxis('地方政府', df['地方政府'].tolist(), is_smooth=True, areastyle_opts=
+    opts.AreaStyleOpts(opacity=0.5))
+line.add_yaxis('实体经济部门', df['实体经济部门'].tolist(), is_smooth=True,
+    areastyle_opts=opts.AreaStyleOpts(opacity=0.5))
+line.add_yaxis('金融部门资产方', df['金融部门资产方'].tolist(), is_smooth=True,
+    areastyle_opts=opts.AreaStyleOpts(opacity=0.5))
+line.add_yaxis('金融部门负债方', df['金融部门负债方'].tolist(), is_smooth=True,
+    areastyle_opts=opts.AreaStyleOpts(opacity=0.5))
+echarts_json = line.dump_options_with_quotes()
+            ```
+2023-07-08 13:53:36 [INFO] 
+            Code running:
+            ```
+            import pandas as pd
+from pyecharts.charts import Line
+from pyecharts.charts import Bar
+from pyecharts import options as opts
+df = df
+line = Line()
+line.add_xaxis(df['年份'])
+line.add_yaxis('居民部门', df['居民部门'])
+line.add_yaxis('非金融企业部门', df['非金融企业部门'])
+line.add_yaxis('政府部门', df['政府部门'])
+line.add_yaxis('中央政府', df['中央政府'])
+line.add_yaxis('地方政府', df['地方政府'])
+line.add_yaxis('实体经济部门', df['实体经济部门'])
+line.add_yaxis('金融部门资产方', df['金融部门资产方'])
+line.add_yaxis('金融部门负债方', df['金融部门负债方'])
+line.set_global_opts(title_opts=opts.TitleOpts(title='各部门占比变化趋势'),
+    yaxis_opts=opts.AxisOpts(name='占比（%）'))
+bar = Bar()
+bar.add_xaxis(df['年份'])
+bar.add_yaxis('居民部门', df['居民部门'])
+bar.add_yaxis('非金融企业部门', df['非金融企业部门'])
+bar.add_yaxis('政府部门', df['政府部门'])
+bar.add_yaxis('中央政府', df['中央政府'])
+bar.add_yaxis('地方政府', df['地方政府'])
+bar.add_yaxis('实体经济部门', df['实体经济部门'])
+bar.add_yaxis('金融部门资产方', df['金融部门资产方'])
+bar.add_yaxis('金融部门负债方', df['金融部门负债方'])
+bar.set_series_opts(label_opts=opts.LabelOpts(is_show=False), stack='总量')
+bar.set_global_opts(title_opts=opts.TitleOpts(title='各部门占比总量'), yaxis_opts=
+    opts.AxisOpts(name='占比（%）'))
+print(line.dump_options())
+print(bar.dump_options())
+            ```
+2023-07-08 13:56:51 [INFO] Invalid Python Code
+2023-07-08 13:57:53 [INFO] 
+            Code running:
+            ```
+            import pandas as pd
+from pyecharts import options as opts
+from pyecharts.charts import Line
+df = df
+df['年份'] = pd.to_datetime(df['年份']).dt.year
+line = Line().add_xaxis(df['年份']).add_yaxis('居民部门', df['居民部门'], label_opts=
+    opts.LabelOpts(is_show=False)).add_yaxis('非金融企业部门', df['非金融企业部门'],
+    label_opts=opts.LabelOpts(is_show=False)).add_yaxis('政府部门', df['政府部门'],
+    label_opts=opts.LabelOpts(is_show=False)).add_yaxis('中央政府', df['中央政府'],
+    label_opts=opts.LabelOpts(is_show=False)).add_yaxis('地方政府', df['地方政府'],
+    label_opts=opts.LabelOpts(is_show=False)).add_yaxis('实体经济部门', df[
+    '实体经济部门'], label_opts=opts.LabelOpts(is_show=False)).add_yaxis('金融部门资产方',
+    df['金融部门资产方'], label_opts=opts.LabelOpts(is_show=False)).add_yaxis(
+    '金融部门负债方', df['金融部门负债方'], label_opts=opts.LabelOpts(is_show=False)
+    ).set_global_opts(title_opts=opts.TitleOpts(title=
+    '1992年至2023年各部门资产负债情况', pos_left='center'), yaxis_opts=opts.AxisOpts(
+    name='亿元'), xaxis_opts=opts.AxisOpts(name='年份')).render(
+    'assets/echarts.json')
+            ```
+2023-07-08 13:59:40 [INFO] 
+            Code running:
+            ```
+            import pandas as pd
+from pyecharts import options as opts
+from pyecharts.charts import Line
+df = df
+line = Line()
+line.set_global_opts(title_opts=opts.TitleOpts(title='各部门资产和负债变化趋势'),
+    xaxis_opts=opts.AxisOpts(name='年份'), yaxis_opts=opts.AxisOpts(name='亿元'))
+line.add_xaxis(df['年份'].tolist())
+line.add_yaxis('居民部门', df['居民部门'].tolist(), is_smooth=True, areastyle_opts=
+    opts.AreaStyleOpts(opacity=0.5))
+line.add_yaxis('非金融企业部门', df['非金融企业部门'].tolist(), is_smooth=True,
+    areastyle_opts=opts.AreaStyleOpts(opacity=0.5))
+line.add_yaxis('政府部门', df['政府部门'].tolist(), is_smooth=True, areastyle_opts=
+    opts.AreaStyleOpts(opacity=0.5))
+line.add_yaxis('中央政府', df['中央政府'].tolist(), is_smooth=True, areastyle_opts=
+    opts.AreaStyleOpts(opacity=0.5))
+line.add_yaxis('地方政府', df['地方政府'].tolist(), is_smooth=True, areastyle_opts=
+    opts.AreaStyleOpts(opacity=0.5))
+line.add_yaxis('实体经济部门', df['实体经济部门'].tolist(), is_smooth=True,
+    areastyle_opts=opts.AreaStyleOpts(opacity=0.5))
+line.add_yaxis('金融部门资产方', df['金融部门资产方'].tolist(), is_smooth=True,
+    areastyle_opts=opts.AreaStyleOpts(opacity=0.5))
+line.add_yaxis('金融部门负债方', df['金融部门负债方'].tolist(), is_smooth=True,
+    areastyle_opts=opts.AreaStyleOpts(opacity=0.5))
+echarts_json = line.dump_options_with_quotes()
+            ```
+2023-07-08 14:01:50 [INFO] 
+            Code running:
+            ```
+            import pandas as pd
+from pyecharts import options as opts
+from pyecharts.charts import Line
+df = df
+df['年份'] = pd.to_datetime(df['年份'])
+line = Line()
+line.add_xaxis(df['年份'].dt.strftime('%Y'))
+line.add_yaxis('居民部门', df['居民部门'])
+line.add_yaxis('非金融企业部门', df['非金融企业部门'])
+line.add_yaxis('政府部门', df['政府部门'])
+line.add_yaxis('中央政府', df['中央政府'])
+line.add_yaxis('地方政府', df['地方政府'])
+line.add_yaxis('实体经济部门', df['实体经济部门'])
+line.add_yaxis('金融部门资产方', df['金融部门资产方'])
+line.add_yaxis('金融部门负债方', df['金融部门负债方'])
+line.set_global_opts(title_opts=opts.TitleOpts(title='各部门资产和负债总额'),
+    xaxis_opts=opts.AxisOpts(name='年份'), yaxis_opts=opts.AxisOpts(name=
+    '总额（亿元）'))
+echarts_json = line.dump_options_with_quotes()
+print(echarts_json)
+            ```
+2023-07-08 14:02:25 [INFO] 
+            Code running:
+            ```
+            import pandas as pd
+from pyecharts import options as opts
+from pyecharts.charts import Bar
+df = df
+df['年份'] = pd.to_datetime(df['年份'])
+bar = Bar()
+bar.add_xaxis(df.columns[1:])
+bar.add_yaxis('居民部门', df['居民部门'].tolist(), stack='stack1')
+bar.add_yaxis('非金融企业部门', df['非金融企业部门'].tolist(), stack='stack1')
+bar.add_yaxis('政府部门', df['政府部门'].tolist(), stack='stack1')
+bar.add_yaxis('中央政府', df['中央政府'].tolist(), stack='stack1')
+bar.add_yaxis('地方政府', df['地方政府'].tolist(), stack='stack1')
+bar.add_yaxis('实体经济部门', df['实体经济部门'].tolist(), stack='stack1')
+bar.add_yaxis('金融部门资产方', df['金融部门资产方'].tolist(), stack='stack1')
+bar.add_yaxis('金融部门负债方', df['金融部门负债方'].tolist(), stack='stack1')
+bar.set_global_opts(title_opts=opts.TitleOpts(title='各部门资产或负债总额堆叠条形图',
+    pos_left='center'), yaxis_opts=opts.AxisOpts(name='资产或负债总额'),
+    xaxis_opts=opts.AxisOpts(name='部门'))
+print(bar.dump_options())
+            ```
+2023-07-08 14:03:37 [INFO] 
+            Code running:
+            ```
+            import pandas as pd
+from pyecharts.charts import Bar
+from pyecharts import options as opts
+df = df
+df = df
+df['资产总额'] = df['中央政府'] + df['地方政府'] + df['金融部门资产方']
+df['负债总额'] = df['中央政府'] + df['地方政府'] + df['金融部门负债方']
+bar = Bar().add_xaxis(['中央政府', '地方政府']).add_yaxis('资产总额', df.loc[:, ['中央政府',
+    '地方政府']].values.tolist(), stack='stack1').add_yaxis('负债总额', df.loc[:, [
+    '中央政府', '地方政府']].values.tolist(), stack='stack1').add_yaxis('金融部门资产方',
+    df.loc[:, ['金融部门资产方']].values.tolist(), stack='stack2').add_yaxis('金融部门负债方'
+    , df.loc[:, ['金融部门负债方']].values.tolist(), stack='stack2').set_global_opts(
+    title_opts=opts.TitleOpts(title='中央政府和地方政府的资产和负债总额'), yaxis_opts=opts.
+    AxisOpts(name='总额（亿元）'), legend_opts=opts.LegendOpts(pos_right='10%'))
+print(bar.dump_options())
+            ```
+2023-07-08 14:04:18 [INFO] 
+            Code running:
+            ```
+            import pandas as pd
+from pyecharts.charts import Bar
+from pyecharts import options as opts
+df = df
+df = df
+df['总资产'] = df['实体经济部门'] + df['金融部门资产方']
+df['总负债'] = df['实体经济部门'] + df['金融部门负债方']
+bar = Bar().add_xaxis(['总资产', '总负债']).add_yaxis('实体经济部门', [df['实体经济部门'].sum
+    (), df['实体经济部门'].sum()]).add_yaxis('金融部门资产方', [df['金融部门资产方'].sum(), 0]
+    ).add_yaxis('金融部门负债方', [0, df['金融部门负债方'].sum()]).set_global_opts(title_opts
+    =opts.TitleOpts(title='实体经济部门和金融部门资产负债总额'), yaxis_opts=opts.AxisOpts(
+    name='亿元'), xaxis_opts=opts.AxisOpts(name='资产/负债'))
+print(bar.dump_options())
+            ```
+2023-07-08 14:04:49 [INFO] 
+            Code running:
+            ```
+            import pandas as pd
+import numpy as np
+from pyecharts import options as opts
+from pyecharts.charts import Scatter
+df = df
+df['年份'] = pd.to_datetime(df['年份'])
+df.set_index('年份', inplace=True)
+scatter = Scatter()
+for col in df.columns:
+    if col != '金融部门资产方' and col != '金融部门负债方':
+        scatter.add_xaxis(df[col]['1992-12':].index.strftime('%Y-%m').tolist())
+        scatter.add_yaxis(col, df[col]['1992-12':].values.tolist(),
+            symbol_size=10)
+scatter.set_global_opts(title_opts=opts.TitleOpts(title='各部门资产负债情况散点图',
+    pos_left='center'), xaxis_opts=opts.AxisOpts(name='资产总额（亿元）'),
+    yaxis_opts=opts.AxisOpts(name='负债总额（亿元）'))
+echarts_json = scatter.dump_options_with_quotes()
+            ```
+2023-07-08 18:25:18 [INFO] 
+            Code running:
+            ```
+            import pandas as pd
+from pyecharts.charts import Line, Bar
+from pyecharts import options as opts
+df = df
+line = Line().add_xaxis(df['年份'].tolist()).add_yaxis('居民部门', df['居民部门'].
+    tolist(), label_opts=opts.LabelOpts(formatter='{value}%')).add_yaxis(
+    '非金融企业部门', df['非金融企业部门'].tolist(), label_opts=opts.LabelOpts(formatter=
+    '{value}%')).add_yaxis('政府部门', df['政府部门'].tolist(), label_opts=opts.
+    LabelOpts(formatter='{value}%')).add_yaxis('中央政府', df['中央政府'].tolist(),
+    label_opts=opts.LabelOpts(formatter='{value}%')).add_yaxis('地方政府', df[
+    '地方政府'].tolist(), label_opts=opts.LabelOpts(formatter='{value}%')
+    ).add_yaxis('实体经济部门', df['实体经济部门'].tolist(), label_opts=opts.LabelOpts(
+    formatter='{value}%')).add_yaxis('金融部门资产方', df['金融部门资产方'].tolist(),
+    label_opts=opts.LabelOpts(formatter='{value}%')).add_yaxis('金融部门负债方',
+    df['金融部门负债方'].tolist(), label_opts=opts.LabelOpts(formatter='{value}%')
+    ).set_global_opts(title_opts=opts.TitleOpts(title='各部门占比变化', pos_left=
+    'center'), yaxis_opts=opts.AxisOpts(axislabel_opts=opts.LabelOpts(
+    formatter='{value}%')), tooltip_opts=opts.TooltipOpts(trigger='axis',
+    axis_pointer_type='cross'))
+bar = Bar().add_xaxis(df['年份'].tolist()).add_yaxis('居民部门', df['居民部门'].
+    tolist(), stack='stack1', label_opts=opts.LabelOpts(formatter='{value}%')
+    ).add_yaxis('非金融企业部门', df['非金融企业部门'].tolist(), stack='stack1',
+    label_opts=opts.LabelOpts(formatter='{value}%')).add_yaxis('政府部门', df[
+    '政府部门'].tolist(), stack='stack1', label_opts=opts.LabelOpts(formatter=
+    '{value}%')).add_yaxis('中央政府', df['中央政府'].tolist(), stack='stack1',
+    label_opts=opts.LabelOpts(formatter='{value}%')).add_yaxis('地方政府', df[
+    '地方政府'].tolist(), stack='stack1', label_opts=opts.LabelOpts(formatter=
+    '{value}%')).add_yaxis('实体经济部门', df['实体经济部门'].tolist(), stack='stack1',
+    label_opts=opts.LabelOpts(formatter='{value}%')).add_yaxis('金融部门资产方',
+    df['金融部门资产方'].tolist(), stack='stack1', label_opts=opts.LabelOpts(
+    formatter='{value}%')).add_yaxis('金融部门负债方', df['金融部门负债方'].tolist(),
+    stack='stack1', label_opts=opts.LabelOpts(formatter='{value}%')
+    ).set_global_opts(title_opts=opts.TitleOpts(title='各部门占比变化', pos_left=
+    'center'), yaxis_opts=opts.AxisOpts(axislabel_opts=opts.LabelOpts(
+    formatter='{value}%')), tooltip_opts=opts.TooltipOpts(trigger='axis',
+    axis_pointer_type='cross'), legend_opts=opts.LegendOpts(pos_left=
+    'right', orient='vertical'))
+grid = line.overlap(bar).set_global_opts(title_opts=opts.TitleOpts(title=
+    '各部门占比变化', pos_left='center'), yaxis_opts=opts.AxisOpts(axislabel_opts=
+    opts.LabelOpts(formatter='{value}%')), tooltip_opts=opts.TooltipOpts(
+    trigger='axis', axis_pointer_type='cross'))
+echarts_json = grid.dump_options_with_quotes()
+print(echarts_json)
+            ```
+2023-07-08 18:26:43 [INFO] 
+            Code running:
+            ```
+            import pandas as pd
+from pyecharts.charts import Bar
+from pyecharts import options as opts
+df = df
+bar = Bar(init_opts=opts.InitOpts(width='1000px', height='500px'))
+bar.add_xaxis(df['年份'].tolist())
+bar.add_yaxis('居民部门', df['居民部门'].tolist(), stack='stack1')
+bar.add_yaxis('非金融企业部门', df['非金融企业部门'].tolist(), stack='stack1')
+bar.add_yaxis('政府部门', df['政府部门'].tolist(), stack='stack1')
+bar.add_yaxis('中央政府', df['中央政府'].tolist(), stack='stack1')
+bar.add_yaxis('地方政府', df['地方政府'].tolist(), stack='stack1')
+bar.add_yaxis('实体经济部门', df['实体经济部门'].tolist(), stack='stack1')
+bar.add_yaxis('金融部门资产方', df['金融部门资产方'].tolist(), stack='stack1')
+bar.add_yaxis('金融部门负债方', df['金融部门负债方'].tolist(), stack='stack1')
+bar.set_global_opts(title_opts=opts.TitleOpts(title=
+    '1992-12至1993-12 各部门占比堆积柱形图'), xaxis_opts=opts.AxisOpts(name='年份'),
+    yaxis_opts=opts.AxisOpts(name='占比（%）'))
+echarts_json = bar.dump_options_with_quotes()
+echarts_json
+            ```
+2023-07-08 18:27:58 [INFO] 
+            Code running:
+            ```
+            import pandas as pd
+from pyecharts import options as opts
+from pyecharts.charts import Bar
+df = df
+df['年份'] = df['年份'].astype(str)
+df = df
+bar = Bar()
+bar.add_xaxis(df.index.tolist())
+bar.add_yaxis('居民部门', df['居民部门'].tolist(), stack='stack1')
+bar.add_yaxis('非金融企业部门', df['非金融企业部门'].tolist(), stack='stack1')
+bar.add_yaxis('政府部门', df['政府部门'].tolist(), stack='stack1')
+bar.add_yaxis('中央政府', df['中央政府'].tolist(), stack='stack2')
+bar.add_yaxis('地方政府', df['地方政府'].tolist(), stack='stack2')
+bar.add_yaxis('实体经济部门', df['实体经济部门'].tolist(), stack='stack1')
+bar.add_yaxis('金融部门资产方', df['金融部门资产方'].tolist(), stack='stack2')
+bar.add_yaxis('金融部门负债方', df['金融部门负债方'].tolist(), stack='stack2')
+bar.set_global_opts(title_opts=opts.TitleOpts(title='各部门资产和负债堆积柱形图',
+    pos_left='center'), yaxis_opts=opts.AxisOpts(name='资产和负债（万亿）'),
+    xaxis_opts=opts.AxisOpts(name='年份'))
+bar.render()
+echarts_json = bar.dump_options_with_quotes()
+            ```
+2023-07-08 18:34:32 [INFO] Please provide a valid json string
+2023-07-08 18:35:55 [INFO] 
+            Code running:
+            ```
+            import pandas as pd
+from pyecharts.charts import Line
+from pyecharts import options as opts
+df = df
+df['年份'] = pd.to_datetime(df['年份'])
+line = Line()
+line.add_xaxis(df['年份'].dt.strftime('%Y'))
+line.add_yaxis('居民部门', df['居民部门'])
+line.add_yaxis('非金融企业部门', df['非金融企业部门'])
+line.add_yaxis('政府部门', df['政府部门'])
+line.add_yaxis('中央政府', df['中央政府'])
+line.add_yaxis('地方政府', df['地方政府'])
+line.add_yaxis('实体经济部门', df['实体经济部门'])
+line.add_yaxis('金融部门资产方', df['金融部门资产方'])
+line.add_yaxis('金融部门负债方', df['金融部门负债方'])
+line.set_global_opts(title_opts=opts.TitleOpts(title='各部门资产和负债变化趋势'),
+    yaxis_opts=opts.AxisOpts(name='亿元'), xaxis_opts=opts.AxisOpts(name='年份'))
+print(line.dump_options())
+            ```
+2023-07-08 18:37:00 [INFO] 
+            Code running:
+            ```
+            import pandas as pd
+from pyecharts.charts import Scatter
+from pyecharts import options as opts
+df = df
+df['年份'] = pd.to_datetime(df['年份'])
+df['年份'] = df['年份'].dt.year
+df['金融部门净资产'] = df['金融部门资产方'] - df['金融部门负债方']
+scatter = Scatter()
+scatter.add_xaxis(df['金融部门净资产'])
+scatter.add_yaxis('居民部门', df['居民部门'])
+scatter.add_yaxis('非金融企业部门', df['非金融企业部门'])
+scatter.add_yaxis('政府部门', df['政府部门'])
+scatter.add_yaxis('中央政府', df['中央政府'])
+scatter.add_yaxis('地方政府', df['地方政府'])
+scatter.add_yaxis('实体经济部门', df['实体经济部门'])
+scatter.add_yaxis('金融部门', df['金融部门净资产'])
+scatter.set_global_opts(title_opts=opts.TitleOpts(title='各部门资产和负债之间的关系'),
+    xaxis_opts=opts.AxisOpts(name='金融部门净资产（亿元）'), yaxis_opts=opts.AxisOpts(
+    name='资产或负债（亿元）'))
+echarts_json = scatter.dump_options_with_quotes()
+print(echarts_json)
+            ```
+2023-07-08 18:37:39 [INFO] error_code=context_length_exceeded error_message="This model's maximum context length is 8193 tokens. However, you requested 12298 tokens (4106 in the messages, 8192 in the completion). Please reduce the length of the messages or completion." error_param=messages error_type=invalid_request_error message='OpenAI API error received' stream_error=False
+2023-07-08 18:40:05 [INFO] Invalid Python Code
+2023-07-08 18:41:28 [INFO] 
+            Code running:
+            ```
+            import pandas as pd
+from pyecharts.charts import Line
+from pyecharts import options as opts
+df = df
+df['年份'] = pd.to_datetime(df['年份'])
+x_data = df['年份'].dt.strftime('%Y').tolist()
+y_data = []
+for col in df.columns[1:]:
+    y_data.append(df[col].tolist())
+line = Line()
+line.add_xaxis(xaxis_data=x_data)
+for i in range(len(y_data)):
+    line.add_yaxis(series_name=df.columns[i + 1], y_axis=y_data[i],
+        label_opts=opts.LabelOpts(is_show=False))
+line.set_global_opts(title_opts=opts.TitleOpts(title='各部门数据变化趋势', subtitle=
+    '数据来源：XXXX'), tooltip_opts=opts.TooltipOpts(trigger='axis',
+    axis_pointer_type='cross'), xaxis_opts=opts.AxisOpts(type_='category',
+    boundary_gap=False, axislabel_opts=opts.LabelOpts(formatter='{value}年')
+    ), yaxis_opts=opts.AxisOpts(type_='value', axislabel_opts=opts.
+    LabelOpts(formatter='{value} 单位')))
+line.dump_options_with_quotes()
+            ```
+2023-07-08 18:42:57 [INFO] 
+            Code running:
+            ```
+            import pandas as pd
+from pyecharts import options as opts
+from pyecharts.charts import Bar
+df = df
+df = df
+names = df.columns[1:]
+bar = Bar().add_xaxis(df.index.tolist()).set_global_opts(title_opts=opts.
+    TitleOpts(title='各部门资产负债情况', pos_left='center'), yaxis_opts=opts.
+    AxisOpts(name='亿元'), xaxis_opts=opts.AxisOpts(name='年份'))
+for name in names:
+    bar.add_yaxis(series_name=name, y_axis=df[name].tolist(), stack='stack')
+echarts_json = bar.dump_options_with_quotes()
+print(echarts_json)
+            ```
+2023-07-08 18:43:32 [INFO] 
+            Code running:
+            ```
+            import pandas as pd
+from pyecharts.charts import Scatter
+from pyecharts import options as opts
+df = df
+df['年份'] = pd.to_datetime(df['年份'])
+scatter = Scatter()
+scatter.add_xaxis(df['政府部门'])
+scatter.add_yaxis('企业部门', df['非金融企业部门'])
+scatter.set_global_opts(title_opts=opts.TitleOpts(title='政府部门和企业部门关系图'),
+    xaxis_opts=opts.AxisOpts(name='政府部门（亿元）'), yaxis_opts=opts.AxisOpts(
+    name='企业部门（亿元）'))
+print(scatter.dump_options_with_quotes())
+            ```
+2023-07-08 18:44:00 [INFO] 
+            Code running:
+            ```
+            import pandas as pd
+from pyecharts import options as opts
+from pyecharts.charts import Scatter
+df = df
+scatter = Scatter().add_xaxis(df['实体经济部门']).add_yaxis('金融部门资产方', df[
+    '金融部门资产方'], label_opts=opts.LabelOpts(formatter='{b}'), symbol_size=10
+    ).add_yaxis('金融部门负债方', df['金融部门负债方'], label_opts=opts.LabelOpts(
+    formatter='{b}'), symbol_size=10).set_global_opts(title_opts=opts.
+    TitleOpts(title='实体经济部门与金融部门的关系'), xaxis_opts=opts.AxisOpts(name=
+    '实体经济部门（单位：亿元）'), yaxis_opts=opts.AxisOpts(name='金融部门（单位：亿元）'))
+echarts_json = scatter.dump_options_with_quotes()
+            ```
+2023-07-08 19:05:12 [INFO] 
+            Code running:
+            ```
+            import pandas as pd
+from pyecharts import options as opts
+from pyecharts.charts import Bar
+df = df
+central = df[['年份', '中央政府']]
+local = df[['年份', '地方政府']]
+bar = Bar().add_xaxis(list(central['年份'])).add_yaxis('中央政府', list(central[
+    '中央政府']), stack='stack1').add_yaxis('地方政府', list(local['地方政府']), stack=
+    'stack1').set_global_opts(title_opts=opts.TitleOpts(title=
+    '中央政府和地方政府财政收支情况'), yaxis_opts=opts.AxisOpts(name='亿元'), xaxis_opts=
+    opts.AxisOpts(name='年份'))
+bar.render_notebook()
+            ```
+2023-07-08 19:34:29 [INFO] 
+            Code running:
+            ```
+            import pandas as pd
+from pyecharts.charts import Line
+from pyecharts import options as opts
+df = df
+df['年份'] = pd.to_datetime(df['年份'], format='%Y-%m')
+line = Line()
+line.add_xaxis(df['年份'].dt.strftime('%Y-%m').tolist())
+line.add_yaxis('居民部门', df['居民部门'].tolist())
+line.add_yaxis('非金融企业部门', df['非金融企业部门'].tolist())
+line.add_yaxis('政府部门', df['政府部门'].tolist())
+line.add_yaxis('中央政府', df['中央政府'].tolist())
+line.add_yaxis('地方政府', df['地方政府'].tolist())
+line.add_yaxis('实体经济部门', df['实体经济部门'].tolist())
+line.add_yaxis('金融部门资产方', df['金融部门资产方'].tolist())
+line.add_yaxis('金融部门负债方', df['金融部门负债方'].tolist())
+line.set_global_opts(title_opts=opts.TitleOpts(title='不同部门的资产负债情况随时间的变化',
+    pos_left='center'), xaxis_opts=opts.AxisOpts(name='年份'), yaxis_opts=
+    opts.AxisOpts(name='单位：亿元'))
+echarts_json = line.dump_options_with_quotes()
+echarts_json
+            ```
+2023-07-08 19:57:31 [INFO] 
+            Code running:
+            ```
+            import pandas as pd
+from pyecharts import options as opts
+from pyecharts.charts import Bar
+df = df
+df['年份'] = pd.to_datetime(df['年份'])
+df.set_index('年份', inplace=True)
+df = df
+df = df
+bar = Bar().add_xaxis(df.index.astype(str).tolist()).add_yaxis('居民部门', df[
+    '居民部门'].tolist(), stack='stack1').add_yaxis('非金融企业部门', df['非金融企业部门'].
+    tolist(), stack='stack1').add_yaxis('政府部门', df['政府部门'].tolist(), stack=
+    'stack1').add_yaxis('实体经济部门', df['实体经济部门'].tolist(), stack='stack1'
+    ).add_yaxis('金融部门资产方', df['金融部门资产方'].tolist(), stack='stack2').add_yaxis(
+    '金融部门负债方', df['金融部门负债方'].tolist(), stack='stack2').set_global_opts(
+    title_opts=opts.TitleOpts(title='各部门资产负债情况', pos_left='center'),
+    yaxis_opts=opts.AxisOpts(name='亿元'), legend_opts=opts.LegendOpts(
+    pos_right='10%'))
+echarts_json = bar.dump_options_with_quotes()
+            ```
+2023-07-08 19:59:53 [INFO] 
+            Code running:
+            ```
+            import pandas as pd
+from pyecharts.charts import Line
+from pyecharts import options as opts
+df = df
+line = Line()
+x_data = df['年份'].tolist()
+y_data1 = df['金融部门资产方'].tolist()
+y_data2 = df['金融部门负债方'].tolist()
+line.add_xaxis(x_data)
+line.add_yaxis('金融部门资产方', y_data1, label_opts=opts.LabelOpts(formatter=
+    '{value}亿元'))
+line.add_yaxis('金融部门负债方', y_data2, label_opts=opts.LabelOpts(formatter=
+    '{value}亿元'))
+line.set_global_opts(title_opts=opts.TitleOpts(title='金融部门资产负债情况随时间的变化',
+    pos_left='center'), xaxis_opts=opts.AxisOpts(name='年份'), yaxis_opts=
+    opts.AxisOpts(name='亿元'))
+echarts_json = line.dump_options_with_quotes()
+print(echarts_json)
+            ```
+2023-07-08 20:02:16 [INFO] 
+            Code running:
+            ```
+            import pandas as pd
+from pyecharts import options as opts
+from pyecharts.charts import Bar, Radar
+df = df
+df['年份'] = pd.to_datetime(df['年份'])
+df['年份'] = df['年份'].dt.year.astype(str)
+df.set_index('年份', inplace=True)
+bar = Bar().add_xaxis(df.index.tolist()).add_yaxis('政府部门资产', df['政府部门'],
+    stack='总量').add_yaxis('政府部门负债', df['政府部门'], stack='总量').add_yaxis(
+    '实体经济部门资产', df['实体经济部门'], stack='总量').add_yaxis('实体经济部门负债', df['实体经济部门'
+    ], stack='总量').set_global_opts(title_opts=opts.TitleOpts(title=
+    '政府部门和实体经济部门资产负债情况'), yaxis_opts=opts.AxisOpts(name='亿元'), legend_opts=
+    opts.LegendOpts(pos_left='center', pos_top='bottom'))
+radar = Radar().add_schema(schema=[opts.RadarIndicatorItem(name='政府部门资产',
+    max_=150), opts.RadarIndicatorItem(name='政府部门负债', max_=150), opts.
+    RadarIndicatorItem(name='实体经济部门资产', max_=150), opts.RadarIndicatorItem(
+    name='实体经济部门负债', max_=150)]).add_series(series_name='资产负债情况', data=[[df
+    ['政府部门资产'][i], df['政府部门负债'][i], df['实体经济部门资产'][i], df['实体经济部门负债'][i]] for
+    i in range(len(df))]).set_series_opts(label_opts=opts.LabelOpts(is_show
+    =False), areastyle_opts=opts.AreaStyleOpts(opacity=0.5)).set_global_opts(
+    title_opts=opts.TitleOpts(title='政府部门和实体经济部门资产负债情况'), legend_opts=opts.
+    LegendOpts(pos_left='center', pos_top='bottom'))
+print(bar.dump_options_with_quotes())
+print(radar.dump_options_with_quotes())
+            ```
+2023-07-08 20:06:18 [INFO] 
+            Code running:
+            ```
+            import pandas as pd
+from pyecharts import options as opts
+from pyecharts.charts import Line
+df = df
+df['年份'] = pd.to_datetime(df['年份'])
+df.set_index('年份', inplace=True)
+df = df
+line = Line()
+line.set_global_opts(title_opts=opts.TitleOpts(title='各部门占比随时间的变化趋势',
+    pos_left='center'), tooltip_opts=opts.TooltipOpts(trigger='axis',
+    axis_pointer_type='cross'), xaxis_opts=opts.AxisOpts(name='年份', type_=
+    'time', axislabel_opts=opts.LabelOpts(formatter='{yyyy}-{MM}')),
+    yaxis_opts=opts.AxisOpts(name='占比', axislabel_opts=opts.LabelOpts(
+    formatter='{value}%')))
+for col in df.columns:
+    line.add_xaxis(df.index.tolist())
+    line.add_yaxis(col, df[col].tolist(), label_opts=opts.LabelOpts(is_show
+        =False))
+line.render_notebook()
+print(line.dump_options())
+            ```
+2023-07-08 20:06:57 [INFO] error_code=context_length_exceeded error_message="This model's maximum context length is 8193 tokens. However, you requested 13668 tokens (5476 in the messages, 8192 in the completion). Please reduce the length of the messages or completion." error_param=messages error_type=invalid_request_error message='OpenAI API error received' stream_error=False

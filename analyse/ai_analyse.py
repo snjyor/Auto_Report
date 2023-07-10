@@ -19,6 +19,7 @@ from prompts import Prompts
 from configs.constants import *
 from stats_data import get_stats_data
 
+report_name = "report.json"
 
 class AIAnalyse:
 
@@ -26,6 +27,7 @@ class AIAnalyse:
         self._max_retries = 3
         self.prompts = None
         self.global_params = {}
+        self.reports = []
 
     def run(self,
             data_frame: pd.DataFrame,
@@ -44,6 +46,7 @@ class AIAnalyse:
             try:
                 print(f"根据以下数据可视化建议进行绘图：{each_suggestion}", end="\n")
                 print("代码生成中...")
+                item = {"suggestion": each_suggestion}
                 code_prompt = self.prompts.generate_python_code_prompt_by_suggestion(each_suggestion)
                 code = self.generate_code(code_prompt)
                 self.global_params["suggestion"] = each_suggestion
@@ -52,22 +55,32 @@ class AIAnalyse:
                     print(self.global_params.get("code", ""))
                 print("代码执行中...")
                 json_str_result = self.run_code(code, data_frame)
-                if save_charts:
+                if save_charts and json_str_result:
                     self.save_charts_json(json_str_result)
                     print(f"图表已保存至{CHARTS_EXPORT_PATH}")
-                if charts_description:
+                if charts_description and json_str_result:
                     stats_data = get_stats_data(json_str_result)
+                    item.update(stats_data)
                     description_prompt = self.prompts.generate_charts_description_prompt(**stats_data)
                     description_response = utils.gpt(description_prompt)
                     print(f"图表描述：{description_response}")
                     descriptions = self._get_description(description_response)
                     print(f"图表描述：{descriptions}")
+                    item.update({"description": descriptions})
+                    utils.log(f"{json.dumps(stats_data, indent=2, ensure_ascii=False)}")
+                    utils.log(f"图表描述：{descriptions}")
                 else:
                     descriptions = ""
+                self.reports.append(item)
                 yield json_str_result, descriptions
             except Exception as e:
                 print(f"Unable to run code for suggestion: {each_suggestion}, error: {e}")
                 continue
+        self._save_report()
+
+    def _save_report(self):
+        with open(report_name, "w") as f:
+            f.write(json.dumps(self.reports, indent=2, ensure_ascii=False))
 
     def __call__(self,
                  data_frame: pd.DataFrame,
@@ -110,7 +123,8 @@ class AIAnalyse:
 
     def save_charts_json(self, json_str: str = None, folder_name: str = None):
         if not json_str:
-            raise ValueError("Please provide a valid json string")
+            utils.log("Please provide a valid json string")
+            return
         json_data = json.loads(json_str)
         file_name = json_data.get("title", [{}])[0].get("text", utils.md5(json_str)).replace("/", "_").replace("\\", "_")
         if folder_name:
@@ -145,7 +159,13 @@ class AIAnalyse:
             {code_to_run}
             ```"""
         )
-        data_frame.reset_index(drop=False, inplace=True)
+        if data_frame.index.name is not None:
+            if data_frame.index.dtype != "int64" or data_frame.index.name != "index":
+                data_frame.reset_index(drop=False, inplace=True)
+        if "level_0" in data_frame.columns:
+            data_frame.drop(columns=["level_0"], inplace=True)
+        if "index" in data_frame.columns:
+            data_frame.drop(columns=["index"], inplace=True)
         environment = {name: getattr(__builtins__, name) for name in dir(__builtins__) if not name.startswith("_")}
         environment.update({
             "pd": pd,
@@ -173,7 +193,8 @@ class AIAnalyse:
                     code_to_run = self.generate_code(fix_error_prompt)
 
         captured_output = output.getvalue()
-
+        # if captured_output:
+        #     return captured_output
         # Evaluate the last line and return its value or the captured output
         lines = code.strip().split("\n")
         last_line = lines[-1].strip()
@@ -184,7 +205,15 @@ class AIAnalyse:
             else:
                 last_node = ast.parse(last_line).body[0]
                 if isinstance(last_node, ast.Assign) and last_node.targets:
-                    last_line = last_node.value
+                    last_line = last_node.targets[0].id
+                elif isinstance(last_node, ast.Expr) and isinstance(last_node.value, ast.Call) and isinstance(last_node.value.func, ast.Attribute) and last_node.value.func.attr == 'render_notebook':
+                    try:
+                        value = eval(compile(ast.Expression(last_node.value.args[0]), '<string>', 'eval'))
+                    except Exception as err:
+                        notebook_data = eval(last_line, environment).data
+                        value = re.findall(r"=.(\{[\s\S]*?);", notebook_data)
+                        value = value[0] if value else ""
+                    return value
             return eval(last_line, environment)
         except Exception:
             return captured_output
