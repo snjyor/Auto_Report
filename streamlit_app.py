@@ -27,6 +27,7 @@ class AiDataAnalysisFrontend:
 
     def report_demo(self):
         with st.spinner("正在根据您的数据生成数据分析建议……"):
+            time.sleep(4)
             with open(os.path.join(ABS_PATH, "analyse", "report_demo.json"), "r") as f:
                 reports = json.loads(f.read())
             all_charts_path = []
