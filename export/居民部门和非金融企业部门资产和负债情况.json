@@ -2689,17 +2689,7 @@
       "text": "居民部门和非金融企业部门资产和负债情况",
       "target": "blank",
       "subtarget": "blank",
-      "padding": 5,
-      "itemGap": 10,
-      "textAlign": "auto",
-      "textVerticalAlign": "auto",
-      "triggerEvent": false
-    },
-    {
-      "show": true,
-      "text": "居民部门和非金融企业部门资产和负债情况",
-      "target": "blank",
-      "subtarget": "blank",
+      "left": "left",
       "padding": 5,
       "itemGap": 10,
       "textAlign": "auto",

@@ -2338,7 +2338,7 @@
       "text": "实体经济部门和金融部门资产和负债情况",
       "target": "blank",
       "subtarget": "blank",
-      "left": "center",
+      "left": "left",
       "padding": 5,
       "itemGap": 10,
       "textAlign": "auto",

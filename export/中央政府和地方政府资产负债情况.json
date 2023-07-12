@@ -851,7 +851,7 @@
       "text": "中央政府和地方政府资产负债情况",
       "target": "blank",
       "subtarget": "blank",
-      "left": "center",
+      "left": "left",
       "padding": 5,
       "itemGap": 10,
       "textAlign": "auto",

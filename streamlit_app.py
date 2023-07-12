@@ -15,19 +15,19 @@ class AiDataAnalysisFrontend:
         st.set_page_config(page_title="Auto Data Analysis", page_icon="📊", layout="wide")
         st.markdown('<h1 style="text-align: center;">AI Data Analysis</h1>', unsafe_allow_html=True)
 
-    def draw_page(self):
-        for root, path, names in os.walk(os.path.join(ABS_PATH, "export")):
-            for name in names:
-                with open(os.path.join(root, name), "r") as f:
-                    content = f.read()
-                    option = json.loads(content)
-                    st_echarts(option, height="600px", width="100%")
-                    st.write(name.split(".")[0])
-                    time.sleep(1)
+    # def draw_page(self):
+    #     for root, path, names in os.walk(os.path.join(ABS_PATH, "export")):
+    #         for name in names:
+    #             with open(os.path.join(root, name), "r") as f:
+    #                 content = f.read()
+    #                 option = json.loads(content)
+    #                 st_echarts(option, height="600px", width="100%")
+    #                 st.write(name.split(".")[0])
+    #                 time.sleep(1)
 
     def report_demo(self):
         with st.spinner("正在根据您的数据生成数据分析建议……"):
-            time.sleep(4)
+            time.sleep(2)
             with open(os.path.join(ABS_PATH, "analyse", "report_demo.json"), "r") as f:
                 reports = json.loads(f.read())
             all_charts_path = []
@@ -69,9 +69,5 @@ class AiDataAnalysisFrontend:
 
 if __name__ == '__main__':
     client = AiDataAnalysisFrontend()
-    # client.save_pdf()
-    # markdown_to_pdf()
-    # client.draw_page()
     client.report_demo()
-    # print("Done!")
 

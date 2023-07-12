@@ -4420,7 +4420,7 @@
       "text": "各部门资产和负债趋势变化",
       "target": "blank",
       "subtarget": "blank",
-      "left": "center",
+      "left": "left",
       "padding": 5,
       "itemGap": 10,
       "textAlign": "auto",
