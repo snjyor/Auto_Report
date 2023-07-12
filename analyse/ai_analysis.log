@@ -1410,3 +1410,443 @@ line.render_notebook()
 print(line.dump_options())
             ```
 2023-07-08 20:06:57 [INFO] error_code=context_length_exceeded error_message="This model's maximum context length is 8193 tokens. However, you requested 13668 tokens (5476 in the messages, 8192 in the completion). Please reduce the length of the messages or completion." error_param=messages error_type=invalid_request_error message='OpenAI API error received' stream_error=False
+2023-07-11 04:20:41 [INFO] 
+            Code running:
+            ```
+            import pandas as pd
+from pyecharts.charts import Line
+from pyecharts import options as opts
+df = df
+line = Line()
+line.add_xaxis(list(df['年份']))
+line.add_yaxis('居民部门', list(df['居民部门']))
+line.add_yaxis('非金融企业部门', list(df['非金融企业部门']))
+line.add_yaxis('政府部门', list(df['政府部门']))
+line.add_yaxis('中央政府', list(df['中央政府']))
+line.add_yaxis('地方政府', list(df['地方政府']))
+line.add_yaxis('实体经济部门', list(df['实体经济部门']))
+line.add_yaxis('金融部门资产方', list(df['金融部门资产方']))
+line.add_yaxis('金融部门负债方', list(df['金融部门负债方']))
+line.set_global_opts(title_opts=opts.TitleOpts(title='各部门占比变化趋势', pos_left=
+    'center'), xaxis_opts=opts.AxisOpts(name='年份'), yaxis_opts=opts.
+    AxisOpts(name='占比（%）'))
+print(line.dump_options())
+            ```
+2023-07-11 04:21:08 [INFO] 
+            Code running:
+            ```
+            import pandas as pd
+from pyecharts.charts import Bar
+from pyecharts import options as opts
+df = df
+df['年份'] = pd.to_datetime(df['年份'])
+df.set_index('年份', inplace=True)
+bar = Bar()
+bar.add_xaxis(df.index.strftime('%Y').tolist())
+bar.add_yaxis('居民部门', df['居民部门'].tolist(), stack='部门')
+bar.add_yaxis('非金融企业部门', df['非金融企业部门'].tolist(), stack='部门')
+bar.add_yaxis('政府部门', df['政府部门'].tolist(), stack='部门')
+bar.add_yaxis('中央政府', df['中央政府'].tolist(), stack='部门')
+bar.add_yaxis('地方政府', df['地方政府'].tolist(), stack='部门')
+bar.add_yaxis('实体经济部门', df['实体经济部门'].tolist(), stack='部门')
+bar.add_yaxis('金融部门资产方', df['金融部门资产方'].tolist(), stack='金融部门')
+bar.add_yaxis('金融部门负债方', df['金融部门负债方'].tolist(), stack='金融部门')
+bar.set_global_opts(title_opts=opts.TitleOpts(title='各部门占比堆叠柱状图', pos_left=
+    'center'), yaxis_opts=opts.AxisOpts(name='占比（%）'), xaxis_opts=opts.
+    AxisOpts(name='年份'))
+bar.render('stacked_bar_chart.html')
+with open('stacked_bar_chart.html', 'r', encoding='utf-8') as f:
+    echarts_json = f.read()
+            ```
+2023-07-11 04:26:27 [INFO] 
+            Code running:
+            ```
+            import pandas as pd
+from pyecharts import options as opts
+from pyecharts.charts import Scatter
+df = df
+scatter = Scatter()
+scatter.add_xaxis(df['年份'].tolist())
+scatter.add_yaxis('居民部门', df['居民部门'].tolist(), symbol_size=10)
+scatter.add_yaxis('非金融企业部门', df['非金融企业部门'].tolist(), symbol_size=10)
+scatter.add_yaxis('政府部门', df['政府部门'].tolist(), symbol_size=10)
+scatter.add_yaxis('中央政府', df['中央政府'].tolist(), symbol_size=10)
+scatter.add_yaxis('地方政府', df['地方政府'].tolist(), symbol_size=10)
+scatter.add_yaxis('实体经济部门', df['实体经济部门'].tolist(), symbol_size=10)
+scatter.add_yaxis('金融部门资产方', df['金融部门资产方'].tolist(), symbol_size=10)
+scatter.add_yaxis('金融部门负债方', df['金融部门负债方'].tolist(), symbol_size=10)
+scatter.set_global_opts(title_opts=opts.TitleOpts(title='各部门数据与时间的相关性',
+    pos_left='center'), xaxis_opts=opts.AxisOpts(name='时间', name_location=
+    'middle'), yaxis_opts=opts.AxisOpts(name='数据', name_location='middle',
+    splitline_opts=opts.SplitLineOpts(is_show=True)))
+scatter.render('scatter.html')
+echarts_json = scatter.dump_options_with_quotes()
+print(echarts_json)
+            ```
+2023-07-11 04:27:08 [INFO] 
+            Code running:
+            ```
+            import pandas as pd
+from pyecharts import options as opts
+from pyecharts.charts import Graph
+df = df
+nodes = []
+for col in df.columns[1:]:
+    nodes.append({'name': col, 'symbolSize': 10})
+links = []
+for i in range(len(df)):
+    for j in range(1, len(df.columns)):
+        links.append({'source': i, 'target': j, 'value': df.iloc[i, j]})
+graph = Graph()
+graph.add('', nodes, links, edge_symbol=['circle', 'arrow'],
+    edge_symbol_size=0.5, edge_label=opts.LabelOpts(is_show=True, position=
+    'middle', formatter='{c}'), layout='force', is_draggable=True,
+    is_focusnode=True, is_roam=True)
+graph.set_global_opts(title_opts=opts.TitleOpts(title='不同部门间的关系'),
+    xaxis_opts=opts.AxisOpts(is_show=True, name='年份'), yaxis_opts=opts.
+    AxisOpts(is_show=True, name='单位：亿元'))
+graph.render()
+print(graph.dump_options_with_quotes())
+            ```
+2023-07-11 04:29:20 [INFO] 
+            Code running:
+            ```
+            import pandas as pd
+from pyecharts import options as opts
+from pyecharts.charts import Line
+df = df
+line = Line()
+line.set_global_opts(title_opts=opts.TitleOpts(title='不同部门指标随时间的变化趋势',
+    pos_left='center'), xaxis_opts=opts.AxisOpts(name='年份'), yaxis_opts=
+    opts.AxisOpts(name='指标'))
+line.add_xaxis(df['年份'].tolist())
+line.add_yaxis('居民部门', df['居民部门'].tolist())
+line.add_yaxis('非金融企业部门', df['非金融企业部门'].tolist())
+line.add_yaxis('政府部门', df['政府部门'].tolist())
+line.add_yaxis('中央政府', df['中央政府'].tolist())
+line.add_yaxis('地方政府', df['地方政府'].tolist())
+line.add_yaxis('实体经济部门', df['实体经济部门'].tolist())
+line.add_yaxis('金融部门资产方', df['金融部门资产方'].tolist())
+line.add_yaxis('金融部门负债方', df['金融部门负债方'].tolist())
+line.render('line.html')
+with open('line.html', 'r', encoding='utf-8') as f:
+    echarts_json = f.read()
+print(echarts_json)
+            ```
+2023-07-11 04:37:25 [INFO] 
+            Code running:
+            ```
+            import pandas as pd
+from pyecharts import options as opts
+from pyecharts.charts import Line
+df = df
+line = Line().set_global_opts(title_opts=opts.TitleOpts(title='各部门指标变化趋势',
+    subtitle='1992年至2023年'), xaxis_opts=opts.AxisOpts(name='年份'),
+    yaxis_opts=opts.AxisOpts(name='指标', axislabel_opts=opts.LabelOpts(
+    formatter='{value}')), tooltip_opts=opts.TooltipOpts(trigger='axis',
+    axis_pointer_type='cross'))
+line_data = []
+line_data.append({'name': '居民部门', 'data': list(df['居民部门']),
+    'areastyle_opts': opts.AreaStyleOpts(opacity=0.7)})
+line_data.append({'name': '非金融企业部门', 'data': list(df['非金融企业部门']),
+    'areastyle_opts': opts.AreaStyleOpts(opacity=0.7)})
+line_data.append({'name': '政府部门', 'data': list(df['政府部门']),
+    'areastyle_opts': opts.AreaStyleOpts(opacity=0.7)})
+line_data.append({'name': '中央政府', 'data': list(df['中央政府']),
+    'areastyle_opts': opts.AreaStyleOpts(opacity=0.7)})
+line_data.append({'name': '地方政府', 'data': list(df['地方政府']),
+    'areastyle_opts': opts.AreaStyleOpts(opacity=0.7)})
+line_data.append({'name': '实体经济部门', 'data': list(df['实体经济部门']),
+    'areastyle_opts': opts.AreaStyleOpts(opacity=0.7)})
+line_data.append({'name': '金融部门资产方', 'data': list(df['金融部门资产方']),
+    'areastyle_opts': opts.AreaStyleOpts(opacity=0.7)})
+line_data.append({'name': '金融部门负债方', 'data': list(df['金融部门负债方']),
+    'areastyle_opts': opts.AreaStyleOpts(opacity=0.7)})
+for data in line_data:
+    line.add_yaxis(series_name=data['name'], y_axis=data['data'],
+        areastyle_opts=data['areastyle_opts'])
+echarts_json = line.dump_options_with_quotes()
+            ```
+2023-07-11 04:39:26 [INFO] 
+            Code running:
+            ```
+            import pandas as pd
+from pyecharts import options as opts
+from pyecharts.charts import Line
+df = df
+x_data = list(df['年份'].values)
+y_data = []
+for col in df.columns[1:]:
+    y_data.append(list(df[col].values))
+line = Line().set_global_opts(title_opts=opts.TitleOpts(title='各部门资产负债变化趋势',
+    pos_left='center'), xaxis_opts=opts.AxisOpts(name='年份'), yaxis_opts=
+    opts.AxisOpts(name='单位：亿元')).add_xaxis(xaxis_data=x_data)
+for i in range(len(y_data)):
+    line.add_yaxis(series_name=df.columns[i + 1], y_axis=y_data[i], symbol=
+        'circle', symbol_size=8, is_smooth=True, label_opts=opts.LabelOpts(
+        is_show=False))
+line.dump_options()
+            ```
+2023-07-11 04:47:16 [INFO] 
+            Code running:
+            ```
+            import pandas as pd
+from pyecharts.charts import Line
+from pyecharts import options as opts
+df = df
+df = df
+line = Line()
+line.set_global_opts(title_opts=opts.TitleOpts(title='各部门资产和负债情况'),
+    xaxis_opts=opts.AxisOpts(name='年份'), yaxis_opts=opts.AxisOpts(name='单位：亿元')
+    )
+line.add_xaxis(df.index.tolist())
+line.add_yaxis('居民部门', df['居民部门'].tolist())
+line.add_yaxis('非金融企业部门', df['非金融企业部门'].tolist())
+line.add_yaxis('政府部门', df['政府部门'].tolist())
+line.add_yaxis('中央政府', df['中央政府'].tolist())
+line.add_yaxis('地方政府', df['地方政府'].tolist())
+line.add_yaxis('实体经济部门', df['实体经济部门'].tolist())
+line.add_yaxis('金融部门资产方', df['金融部门资产方'].tolist())
+line.add_yaxis('金融部门负债方', df['金融部门负债方'].tolist())
+echarts_json = line.dump_options_with_quotes()
+print(echarts_json)
+            ```
+2023-07-11 04:47:43 [INFO] 图表描述：该图表展示了各部门在不同年份下的资产和负债情况。从图表中可以看出，实体经济部门的资产总额最高，接近2800亿元，而政府部门的资产总额最低，仅为21.4亿元。非金融企业部门的资产总额逐年增长，从82.3亿元增长到了167亿元。地方政府的资产总额和负债总额均呈现出逐年增长的趋势，而金融部门的资产方和负债方的总额也在逐年增长，但是资产总额高于负债总额，呈现出良好的财务状况。居民部门的资产总额在前期呈现出缓慢增长的趋势，但在后期快速增长，达到了63.3亿元。总体来说，各部门的资产和负债情况呈现出不同的趋势，但整体上保持着平稳增长的态势。
+2023-07-11 04:48:40 [INFO] 
+            Code running:
+            ```
+            import pandas as pd
+from pyecharts import options as opts
+from pyecharts.charts import Scatter
+df = df
+scatter = Scatter().add_xaxis(df['金融部门资产方']).add_yaxis('居民部门', df['居民部门']
+    ).add_yaxis('非金融企业部门', df['非金融企业部门']).add_yaxis('政府部门', df['政府部门']
+    ).add_yaxis('中央政府', df['中央政府']).add_yaxis('地方政府', df['地方政府']).add_yaxis(
+    '实体经济部门', df['实体经济部门']).add_yaxis('金融部门负债方', df['金融部门负债方']
+    ).set_series_opts(label_opts=opts.LabelOpts(formatter='{b}')
+    ).set_global_opts(title_opts=opts.TitleOpts(title='各部门资产和负债情况',
+    pos_left='center'), xaxis_opts=opts.AxisOpts(name='金融部门资产方（单位：亿）'),
+    yaxis_opts=opts.AxisOpts(name='部门（单位：亿）'))
+print(scatter.dump_options_with_quotes())
+            ```
+2023-07-11 04:48:59 [INFO] 图表描述：这份图表展示了各部门资产和负债情况的散点图。X轴表示金融部门资产方，单位为亿，Y轴表示各部门，单位为亿。数据包括居民部门、非金融企业部门、政府部门、中央政府、地方政府、实体经济部门和金融部门负债方。从图表中可以看出，随着金融部门资产方的增加，各部门的资产也呈现出增加的趋势，但不同部门之间的增长速度存在差异。其中，实体经济部门的资产增长速度最快，其次是非金融企业部门和地方政府，政府部门和中央政府增长速度相对较慢。同时，金融部门负债方的负债也随着金融部门资产方的增加而增加，且增长速度较快。
+2023-07-11 04:50:00 [INFO] 
+            Code running:
+            ```
+            import pandas as pd
+from pyecharts.charts import Bar
+from pyecharts import options as opts
+df = df
+x_data = df['年份'].tolist()
+y_data_asset = [df['居民部门'].tolist(), df['非金融企业部门'].tolist(), df['政府部门'].
+    tolist(), df['中央政府'].tolist(), df['地方政府'].tolist(), df['实体经济部门'].tolist
+    (), df['金融部门资产方'].tolist(), df['金融部门负债方'].tolist()]
+y_data_debt = [df['居民部门'].tolist(), df['非金融企业部门'].tolist(), df['政府部门'].
+    tolist(), df['中央政府'].tolist(), df['地方政府'].tolist(), df['实体经济部门'].tolist
+    (), df['金融部门资产方'].tolist(), df['金融部门负债方'].tolist()]
+bar = Bar(init_opts=opts.InitOpts(width='1000px', height='600px'))
+bar.add_xaxis(x_data)
+bar.add_yaxis('居民部门', y_data_asset[0], stack='stack1')
+bar.add_yaxis('非金融企业部门', y_data_asset[1], stack='stack1')
+bar.add_yaxis('政府部门', y_data_asset[2], stack='stack1')
+bar.add_yaxis('中央政府', y_data_asset[3], stack='stack1')
+bar.add_yaxis('地方政府', y_data_asset[4], stack='stack1')
+bar.add_yaxis('实体经济部门', y_data_asset[5], stack='stack1')
+bar.add_yaxis('金融部门资产方', y_data_asset[6], stack='stack1')
+bar.add_yaxis('金融部门负债方', y_data_debt[7], stack='stack2')
+bar.add_yaxis('居民部门', y_data_debt[0], stack='stack2')
+bar.add_yaxis('非金融企业部门', y_data_debt[1], stack='stack2')
+bar.add_yaxis('政府部门', y_data_debt[2], stack='stack2')
+bar.add_yaxis('中央政府', y_data_debt[3], stack='stack2')
+bar.add_yaxis('地方政府', y_data_debt[4], stack='stack2')
+bar.add_yaxis('实体经济部门', y_data_debt[5], stack='stack2')
+bar.set_series_opts(label_opts=opts.LabelOpts(is_show=False))
+bar.set_global_opts(title_opts=opts.TitleOpts(title='各部门资产和负债情况', subtitle=
+    '单位：亿元'))
+bar.render_notebook()
+bar_json = bar.dump_options_with_quotes()
+print(bar_json)
+            ```
+2023-07-11 04:50:16 [INFO] 图表描述：<startDescription>
+这份图表数据展示了各部门在一段时间内的资产和负债情况。其中，非金融企业部门的资产最高，最高值为167，而金融部门负债方的平均值最低，为34.89。居民部门的资产和负债情况波动较大，最高值分别为63.3和7.5，最低值分别为2.7和7.0。政府部门和中央政府的资产和负债情况相对稳定，且政府部门的平均负债比平均资产高。地方政府的资产和负债情况波动较大，最高值分别为51.5和16.1。实体经济部门的资产逐年增长，最高值为281.8，而金融部门资产方的平均值为36.21，且逐年增长。综合来看，各部门的资产和负债情况存在差异，非金融企业部门资产最高，金融部门负债方的平均值最低，而其他部门的资产和负债情况存在波动和稳定的情况。
+2023-07-11 04:50:41 [INFO] 
+            Code running:
+            ```
+            import pandas as pd
+from pyecharts import options as opts
+from pyecharts.charts import Line
+df = df
+line = Line()
+line.set_global_opts(title_opts=opts.TitleOpts(title='政府部门和实体经济部门资产负债情况'),
+    xaxis_opts=opts.AxisOpts(name='年份'), yaxis_opts=opts.AxisOpts(name='亿元'))
+line.add_xaxis(df['年份'].tolist())
+line.add_yaxis('政府部门资产', df['政府部门'], is_smooth=True)
+line.add_yaxis('政府部门负债', df['金融部门负债方'], is_smooth=True)
+line.add_xaxis(df['年份'].tolist())
+line.add_yaxis('实体经济部门资产', df['实体经济部门'], is_smooth=True)
+line.add_yaxis('实体经济部门负债', df['金融部门资产方'], is_smooth=True)
+echarts_json = line.render_embed()
+print(echarts_json)
+            ```
+2023-07-11 04:50:41 [INFO] Unable to parse the output: <!DOCTYPE html>  error: Expecting value: line 1 column 1 (char 0)
+2023-07-11 04:50:51 [INFO] 图表描述：该图表展示了政府部门和实体经济部门资产负债情况在1992年到2000年之间的变化。其中，政府部门资产和负债的变化幅度较小，资产在14.5亿元左右波动，负债在34.9亿元左右波动。而实体经济部门资产和负债的变化幅度较大，资产从93.8亿元增长到了121.4亿元，负债从7.7亿元增长到了22.5亿元。整个经济体系的总资产和总负债都在逐年增长，但实体经济部门的增速明显高于政府部门。可以看出，实体经济部门是经济增长的主要推动力量，但也需要注意实体经济部门负债的增长速度，这可能会对经济发展产生潜在的风险影响。
+2023-07-11 04:51:05 [INFO] 
+            Code running:
+            ```
+            import pandas as pd
+from pyecharts.charts import Scatter
+from pyecharts import options as opts
+df = df
+scatter = Scatter(init_opts=opts.InitOpts(width='800px', height='400px'))
+scatter.add_xaxis(df['中央政府'])
+scatter.add_yaxis('资产方', df['金融部门资产方'])
+scatter.add_yaxis('负债方', df['金融部门负债方'])
+scatter.set_global_opts(title_opts=opts.TitleOpts(title='中央政府与金融部门资产负债情况'),
+    xaxis_opts=opts.AxisOpts(name='中央政府资产'), yaxis_opts=opts.AxisOpts(name=
+    '金融部门资产负债'))
+echarts_json = scatter.dump_options_with_quotes()
+print(echarts_json)
+            ```
+2023-07-11 04:51:13 [INFO] 图表描述：<startDescription>
+这份图表数据展示了中央政府与金融部门的资产负债情况，以scatter类型的图表呈现。其中，X轴代表中央政府资产，Y轴代表金融部门资产负债。通过观察图表可以看出，中央政府资产与金融部门资产负债呈现出正相关的趋势，即中央政府资产增加，金融部门资产负债也相应增加。同时，图表中还展示了资产方和负债方的数据，可以看出资产方的资产和负债方的负债都比较高，且两者都呈现出增加的趋势。总体来看，这份图表数据反映了中央政府和金融部门的资产负债情况，以及它们之间的关联性。
+2023-07-11 05:02:13 [INFO] 
+            Code running:
+            ```
+            import pandas as pd
+from pyecharts.charts import Line
+from pyecharts import options as opts
+df = df
+df['年份'] = pd.to_datetime(df['年份'])
+line = Line()
+line.add_xaxis(df['年份'].dt.strftime('%Y').tolist())
+line.add_yaxis('居民部门', df['居民部门'].tolist())
+line.add_yaxis('非金融企业部门', df['非金融企业部门'].tolist())
+line.add_yaxis('政府部门', df['政府部门'].tolist())
+line.add_yaxis('中央政府', df['中央政府'].tolist())
+line.add_yaxis('地方政府', df['地方政府'].tolist())
+line.add_yaxis('实体经济部门', df['实体经济部门'].tolist())
+line.add_yaxis('金融部门资产方', df['金融部门资产方'].tolist())
+line.add_yaxis('金融部门负债方', df['金融部门负债方'].tolist())
+line.set_global_opts(title_opts=opts.TitleOpts(title='各部门资产和负债趋势变化',
+    pos_left='center'), xaxis_opts=opts.AxisOpts(name='年份', type_=
+    'category'), yaxis_opts=opts.AxisOpts(name='亿元', type_='value'))
+line.render_notebook()
+            ```
+2023-07-11 05:02:26 [INFO] 图表描述：该图表展示了1992年至2000年间各部门资产和负债的趋势变化。其中，非金融企业部门的资产总额在这段时间内不断增长，从1992年的90亿元增长到2000年的96.9亿元；实体经济部门的资产总额也呈现出不断增长的趋势，从1992年的105.8亿元增长到2000年的121.4亿元。而政府部门、中央政府和地方政府的资产总额和负债总额的变化较为复杂，呈现出波动上升的趋势。金融部门的资产总额和负债总额也呈现出不断增长的趋势，其中资产总额的增长速度略高于负债总额的增长速度。居民部门的资产总额和负债总额在这段时间内波动较大，但总体呈现出下降趋势，从1992年的7.5亿元下降到2000年的7亿元左右。综合来看，该图表表明了这些部门在这段时间内的财务状况和变化趋势，为经济发展提供了一定的参考依据。
+2023-07-11 05:02:49 [INFO] 
+            Code running:
+            ```
+            import pandas as pd
+from pyecharts.charts import Bar, Line
+from pyecharts import options as opts
+df = df
+df['年份'] = pd.to_datetime(df['年份'])
+bar = Bar().add_xaxis(df['年份'].dt.strftime('%Y').tolist()).add_yaxis('居民部门',
+    df['居民部门'].tolist(), stack='资产').add_yaxis('非金融企业部门', df['非金融企业部门'].
+    tolist(), stack='资产').add_yaxis('政府部门', df['政府部门'].tolist(), stack='资产'
+    ).add_yaxis('中央政府', df['中央政府'].tolist(), stack='负债').add_yaxis('地方政府',
+    df['地方政府'].tolist(), stack='负债').add_yaxis('实体经济部门', df['实体经济部门'].
+    tolist(), stack='资产').add_yaxis('金融部门资产方', df['金融部门资产方'].tolist(),
+    stack='负债').add_yaxis('金融部门负债方', df['金融部门负债方'].tolist(), stack='资产'
+    ).set_global_opts(title_opts=opts.TitleOpts(title='各部门资产和负债情况',
+    pos_left='center'), yaxis_opts=opts.AxisOpts(name='亿元'), xaxis_opts=
+    opts.AxisOpts(name='年份'))
+bar.dump_options_with_quotes()
+            ```
+2023-07-11 05:03:01 [INFO] 图表描述：该份图表数据展示了各部门在不同年份的资产和负债情况。其中，实体经济部门是资产和负债均最高的部门，其资产总额从最初的93.8亿元增长到了最高的281.8亿元，负债总额也从最初的93.8亿元增长到了最高的121.6亿元。非金融企业部门是资产总额排名第二的部门，其资产总额从最初的82.3亿元增长到了最高的167亿元，负债总额从最初的82.3亿元增长到了最高的88.2亿元。政府部门的资产总额和负债总额在不同年份之间波动较大，中央政府和地方政府的资产和负债总额均高于政府部门的平均值。金融部门资产方的资产总额从最初的7.7亿元增长到了最高的22.5亿元，而金融部门负债方的负债总额也从最初的6.8亿元增长到了最高的16.1亿元。居民部门的资产总额和负债总额在不同年份之间波动较小，总体来说，其资产和负债总额均较低。
+2023-07-11 05:03:12 [INFO] 
+            Code running:
+            ```
+            import pandas as pd
+from pyecharts import options as opts
+from pyecharts.charts import Line
+df = df
+line = Line()
+line.add_xaxis(list(df['年份']))
+line.add_yaxis('实体经济部门资产', list(df['实体经济部门']), label_opts=opts.LabelOpts(
+    formatter='{value}亿元'))
+line.add_yaxis('实体经济部门负债', list(df['金融部门资产方']), label_opts=opts.LabelOpts(
+    formatter='{value}亿元'))
+line.add_yaxis('金融部门资产方', list(df['金融部门资产方']), label_opts=opts.LabelOpts(
+    formatter='{value}亿元'))
+line.add_yaxis('金融部门负债方', list(df['金融部门负债方']), label_opts=opts.LabelOpts(
+    formatter='{value}亿元'))
+line.set_global_opts(title_opts=opts.TitleOpts(title='实体经济部门和金融部门资产和负债情况',
+    pos_left='center'), yaxis_opts=opts.AxisOpts(name='亿元'), xaxis_opts=
+    opts.AxisOpts(name='年份'))
+line.render_notebook()
+            ```
+2023-07-11 05:03:32 [INFO] 图表描述：该图表展示了实体经济部门和金融部门在1992年到2000年期间的资产和负债情况。从实体经济部门资产和负债的趋势来看，资产呈现出逐年增长的趋势，而负债则呈现出波动上升的趋势。相比之下，金融部门资产和负债的趋势则相对平稳，资产和负债的变化幅度较小。实体经济部门的资产总量明显高于金融部门，但负债方面实体经济部门和金融部门的水平相当。
+
+具体来说，实体经济部门资产从1992年的105.8亿元增长到2000年的121.4亿元，增长了14.8%。而实体经济部门负债则从1992年的7.8亿元增长到2000年的22.5亿元，增长了188.5%。金融部门资产从1992年的7.8亿元增长到2000年的22.5亿元，增长了188.5%。金融部门负债则从1992年的7.2亿元增长到2000年的16.1亿元，增长了123.6%。
+
+总体来看，该图表表明了实体经济部门在这段时间内的资产增长明显高于金融部门，但负债增长也更快，可能需要更多的财务支持。而金融部门的资产和负债变化较为平稳，可能更加稳健。这份数据可以为政策制定者和投资者提供参考，以了解实体经济和金融部门的整体状况和趋势。
+2023-07-11 05:03:51 [INFO] 
+            Code running:
+            ```
+            import pandas as pd
+from pyecharts import options as opts
+from pyecharts.charts import Bar
+df = df
+df = df
+df['中央政府资产占比'] = df['中央政府'] / (df['中央政府'] + df['地方政府'])
+df['地方政府资产占比'] = df['地方政府'] / (df['中央政府'] + df['地方政府'])
+df['中央政府负债占比'] = 1 - df['中央政府资产占比']
+df['地方政府负债占比'] = 1 - df['地方政府资产占比']
+bar = Bar(init_opts=opts.InitOpts(width='1000px', height='500px'))
+bar.add_xaxis(df['年份'].tolist())
+bar.add_yaxis('中央政府资产', df['中央政府资产占比'].tolist(), stack='stack1')
+bar.add_yaxis('地方政府资产', df['地方政府资产占比'].tolist(), stack='stack1')
+bar.add_yaxis('中央政府负债', df['中央政府负债占比'].tolist(), stack='stack2')
+bar.add_yaxis('地方政府负债', df['地方政府负债占比'].tolist(), stack='stack2')
+bar.set_global_opts(title_opts=opts.TitleOpts(title='中央政府和地方政府资产负债情况',
+    pos_left='center'), yaxis_opts=opts.AxisOpts(name='资产负债占比',
+    axislabel_opts=opts.LabelOpts(formatter='{value}%')), xaxis_opts=opts.
+    AxisOpts(name='年份'))
+bar.render_notebook()
+            ```
+2023-07-11 05:04:04 [INFO] 图表描述：该图表展示了中央政府和地方政府在过去几十年中资产负债占比的变化情况。从图表中可以看出，地方政府的资产负债占比一直高于中央政府，且两者的资产负债占比都呈现出了波动的趋势。具体来说，中央政府的资产负债占比在1980年代初期到1990年代初期呈现下降趋势，之后又逐渐回升，到2010年代初期达到了峰值，之后又有所下降。而地方政府的资产负债占比在1980年代初期到1990年代初期呈现上升趋势，之后又逐渐下降，到2010年代初期达到了最低点，之后又有所回升。此外，中央政府和地方政府的负债占比变化趋势与其资产负债占比变化趋势基本相反，即一个上升时另一个下降，反之亦然。总体来看，该图表表明了中央政府和地方政府的资产负债占比和负债占比都呈现出了波动的趋势，且地方政府的资产负债占比一直高于中央政府。
+2023-07-11 05:04:24 [INFO] 
+            Code running:
+            ```
+            import pandas as pd
+from pyecharts.charts import Bar, Line, Grid
+from pyecharts import options as opts
+df = df
+df['年份'] = pd.to_datetime(df['年份'])
+df.set_index('年份', inplace=True)
+bar = Bar()
+bar.add_xaxis(df.index.tolist())
+bar.add_yaxis('居民部门资产', df['居民部门'], stack='stack1')
+bar.add_yaxis('非金融企业部门资产', df['非金融企业部门'], stack='stack1')
+bar.add_yaxis('居民部门负债', df['居民部门'], stack='stack2')
+bar.add_yaxis('非金融企业部门负债', df['非金融企业部门'], stack='stack2')
+bar.set_series_opts(label_opts=opts.LabelOpts(is_show=False))
+bar.set_global_opts(title_opts=opts.TitleOpts(title='居民部门和非金融企业部门资产和负债情况'),
+    yaxis_opts=opts.AxisOpts(name='亿元'))
+bar.render_notebook()
+line = Line()
+line.add_xaxis(df.index.tolist())
+line.add_yaxis('居民部门资产', df['居民部门'], areastyle_opts=opts.AreaStyleOpts(
+    opacity=0.5))
+line.add_yaxis('非金融企业部门资产', df['非金融企业部门'], areastyle_opts=opts.
+    AreaStyleOpts(opacity=0.5))
+line.add_yaxis('居民部门负债', df['居民部门'] * -1, areastyle_opts=opts.AreaStyleOpts
+    (opacity=0.5))
+line.add_yaxis('非金融企业部门负债', df['非金融企业部门'] * -1, areastyle_opts=opts.
+    AreaStyleOpts(opacity=0.5))
+line.set_series_opts(label_opts=opts.LabelOpts(is_show=False))
+line.set_global_opts(title_opts=opts.TitleOpts(title='居民部门和非金融企业部门资产和负债情况'),
+    yaxis_opts=opts.AxisOpts(name='亿元'))
+line.render_notebook()
+grid = Grid()
+grid.add(bar, grid_opts=opts.GridOpts(pos_left='5%', pos_right='5%'))
+grid.add(line, grid_opts=opts.GridOpts(pos_left='5%', pos_right='5%'))
+grid.render_notebook()
+            ```
+2023-07-11 05:04:40 [INFO] 图表描述：<startDescription>
+该图表展示了居民部门和非金融企业部门资产和负债情况的变化趋势。从数据可以看出，居民部门和非金融企业部门的资产总量呈现出不断增长的趋势，而负债总量也在增长，但增长速度相对较慢。其中，非金融企业部门的资产总量明显高于居民部门，而负债总量也更大。此外，居民部门的资产和负债总量相对较小，波动较大，而非金融企业部门的资产和负债总量相对较稳定。
+
+通过对描述性信息的分析，可以看出四个变量的均值、标准差、最小值、最大值、中位数和四分位数等统计指标。其中，居民部门和非金融企业部门的均值和中位数都呈现出增长的趋势，而标准差则在不断减小。这说明资产和负债总量的增长趋势越来越稳定。
+
+综上所述，该图表表明了居民部门和非金融企业部门资产和负债总量的变化趋势，以及它们之间的差异。同时，描述性信息提供了更加具体的统计指标，进一步展示了这些变量的分布情况和趋势。

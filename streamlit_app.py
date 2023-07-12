@@ -27,17 +27,27 @@ class AiDataAnalysisFrontend:
 
     def report_demo(self):
         with st.spinner("正在根据您的数据生成数据分析建议……"):
+            with open(os.path.join(ABS_PATH, "analyse", "report_demo.json"), "r") as f:
+                reports = json.loads(f.read())
+            all_charts_path = []
+            for root, path, names in os.walk(os.path.join(ABS_PATH, "export")):
+                for name in names:
+                    charts_path = os.path.join(root, name)
+                    all_charts_path.append(charts_path)
             time.sleep(2)
-        with open(os.path.join(ABS_PATH, "analyse", "report.json"), "r") as f:
-            suggestions = json.loads(f.read())
-        for suggestion in suggestions:
-            with st.spinner(f"正在根据建议：<{suggestion.get('suggestion')}>生成数据分析图表……"):
-                time.sleep(2)
-                st.write(f"图表：{suggestion.get('title')}绘制完成！")
+        for report in reports:
+            with st.spinner(f"正在根据建议：`{report.get('suggestion')}`生成数据分析图表……"):
+                charts_path = [path for path in all_charts_path if report.get("title") in path]
+                charts_path = charts_path[0] if charts_path else ""
+                with open(charts_path, "r") as f:
+                    charts = json.loads(f.read())
+                time.sleep(5)
+                st_echarts(options=charts, height="600px", width="100%")
+
             with st.spinner(f"正在根据数据图表总结描述信息……"):
                 time.sleep(2)
-                st.write(f"{suggestion.get('description')}")
-            st.success(f"<{suggestion.get('suggestion')}>:完成分析")
+                st.write(f"{report.get('description')}")
+            st.success(f"`{report.get('suggestion')}` 分析完成")
         st.success("数据分析完成")
 
 # def markdown_to_pdf():

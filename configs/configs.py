@@ -12,7 +12,7 @@ if USE_AZURE_AI:
     openai.api_base = os.getenv("AZURE_API_BASE", "")
     openai.api_version = os.getenv("AZURE_API_VERSION")
 
-AZURE_GPT_ENGINE = "gpt4-32k"
+AZURE_GPT_ENGINE = "gpt35"
 
 ENGINE_TOKENS_MAPPING = {
         "gpt35": 4096,  # gpt-35-turbo

@@ -60,14 +60,15 @@ class AIAnalyse:
                     print(f"图表已保存至{CHARTS_EXPORT_PATH}")
                 if charts_description and json_str_result:
                     stats_data = get_stats_data(json_str_result)
-                    item.update(stats_data)
+                    stats_data = stats_data if stats_data else {}
+                    item.update({"title": stats_data.get("title", "")})
                     description_prompt = self.prompts.generate_charts_description_prompt(**stats_data)
                     description_response = utils.gpt(description_prompt)
                     print(f"图表描述：{description_response}")
                     descriptions = self._get_description(description_response)
                     print(f"图表描述：{descriptions}")
                     item.update({"description": descriptions})
-                    utils.log(f"{json.dumps(stats_data, indent=2, ensure_ascii=False)}")
+                    stats_data.pop("description", None)
                     utils.log(f"图表描述：{descriptions}")
                 else:
                     descriptions = ""
@@ -193,8 +194,14 @@ class AIAnalyse:
                     code_to_run = self.generate_code(fix_error_prompt)
 
         captured_output = output.getvalue()
-        # if captured_output:
-        #     return captured_output
+        if captured_output:
+            try:
+                json.loads(captured_output)
+            except Exception as err:
+                utils.log(f"Unable to parse the output: {captured_output}, error: {err}")
+                values = re.findall(r"=.(\{[\s\S]*?);", captured_output)
+                captured_output = values[0] if values else ""
+            return captured_output
         # Evaluate the last line and return its value or the captured output
         lines = code.strip().split("\n")
         last_line = lines[-1].strip()
@@ -214,7 +221,14 @@ class AIAnalyse:
                         value = re.findall(r"=.(\{[\s\S]*?);", notebook_data)
                         value = value[0] if value else ""
                     return value
-            return eval(last_line, environment)
+            value = eval(last_line, environment)
+            try:
+                json.loads(value)
+            except Exception as err:
+                utils.log(f"output value is not json format, detail error: {err}")
+                values = re.findall(r"=.(\{[\s\S]*?);", value)
+                value = values[0] if values else ""
+            return value
         except Exception:
             return captured_output
 
