@@ -70,7 +70,7 @@ class AiDataAnalysisFrontend(AIAnalyse):
         else:
             data_frame = pd.read_csv(file_data, index_col=0) if file_data.name.endswith(".csv") else pd.read_excel(file_data, engine="openpyxl")
             df_head = data_frame.head()
-            st.dataframe(df_head)
+            st.dataframe(df_head, )
             num_rows, num_columns = data_frame.shape
             self.prompts = Prompts(num_rows=num_rows, num_cols=num_columns, df_head=df_head)
             highlight_prompt = self.prompts.generate_highlight_prompt()
@@ -80,22 +80,23 @@ class AiDataAnalysisFrontend(AIAnalyse):
                     highlight_response = utils.gpt(highlight_prompt)
                     suggestions_list = self._get_suggestion(highlight_response)
                 for each_suggestion in suggestions_list:
-                    # try:
+                    try:
                         with st.spinner(f"正在根据建议：`{each_suggestion}`生成数据分析图表……"):
                             item = {"suggestion": each_suggestion}
                             code_prompt = self.prompts.generate_python_code_prompt_by_suggestion(each_suggestion)
                             code = self.generate_code(code_prompt)
                             self.global_params["suggestion"] = each_suggestion
                             self.global_params.update({"suggestion": each_suggestion, "code": code})
+                            print("代码执行中...")
+                            json_str_result = self.run_code(code, data_frame)
                             if show_code:
                                 print(self.global_params.get("code", ""))
-                                st.code(code)
-                            print("代码执行中...")
-                        json_str_result = self.run_code(code, data_frame)
-                        st_echarts(options=json.loads(json_str_result), height="600px", width="100%")
-                        if save_charts and json_str_result:
-                            self.save_charts_json(json_str_result)
-                            print(f"图表已保存至")
+                                with st.expander("查看代码", expanded=False):
+                                    st.code(code)
+                            st_echarts(options=json.loads(json_str_result), height="600px", width="100%")
+                            if save_charts and json_str_result:
+                                self.save_charts_json(json_str_result)
+                                print(f"图表已保存至")
                         if charts_description and json_str_result:
                             with st.spinner(f"正在根据数据图表总结描述信息……"):
                                 stats_data = get_stats_data(json_str_result)
@@ -112,9 +113,10 @@ class AiDataAnalysisFrontend(AIAnalyse):
                         else:
                             descriptions = ""
                         self.reports.append(item)
-                    # except Exception as e:
-                    #     print(f"Unable to run code for suggestion: {each_suggestion}, error: {e}")
-                    #     continue
+                    except Exception as e:
+                        print(f"Unable to run code for suggestion: {each_suggestion}, error: {e}")
+                        st.error(f"很抱歉，无法为您生成该建议:`{each_suggestion}`图表")
+                        continue
 
 
 

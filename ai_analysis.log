@@ -1259,3 +1259,140 @@ bar.set_series_opts(label_opts=opts.LabelOpts(is_show=False))
 print(pie.dump_options_with_quotes())
 print(bar.dump_options_with_quotes())
             ```
+2023-07-13 04:22:03 [INFO] 
+            Code running:
+            ```
+            import pandas as pd
+from pyecharts.charts import Line
+from pyecharts import options as opts
+df = df
+line = Line(init_opts=opts.InitOpts(width='1000px', height='600px'))
+line.set_global_opts(title_opts=opts.TitleOpts(title='各部门占比变化情况', pos_left=
+    'center'), tooltip_opts=opts.TooltipOpts(trigger='axis',
+    axis_pointer_type='cross'), legend_opts=opts.LegendOpts(pos_left=
+    'right', orient='vertical'), xaxis_opts=opts.AxisOpts(name='年份'),
+    yaxis_opts=opts.AxisOpts(name='占比(%)'))
+for col in df.columns[1:]:
+    line.add_yaxis(col, df[col].tolist(), is_smooth=True)
+echarts_json = line.dump_options_with_quotes()
+            ```
+2023-07-13 04:22:18 [INFO] 
+            Code running:
+            ```
+            import pandas as pd
+from pyecharts import options as opts
+from pyecharts.charts import Bar, Line, Pie
+from pyecharts.faker import Faker
+df = df
+df['年份'] = pd.to_datetime(df['年份'])
+total = df.iloc[:, 1:].sum(axis=1)
+df.iloc[:, 1:] = df.iloc[:, 1:].div(total, axis=0)
+bar = Bar().add_xaxis(df['年份'].dt.strftime('%Y-%m').tolist()).set_global_opts(
+    title_opts=opts.TitleOpts(title='各部门占比堆积柱状图', pos_left='center'),
+    yaxis_opts=opts.AxisOpts(name='占比', axislabel_opts={'formatter':
+    '{value}'}), legend_opts=opts.LegendOpts(pos_bottom=0))
+for col in df.columns[1:]:
+    bar.add_yaxis(col, df[col].tolist(), stack='stack1')
+pie = Pie().add('', [list(z) for z in zip(df.columns[1:].tolist(), df.iloc[
+    -1, 1:].tolist())]).set_global_opts(title_opts=opts.TitleOpts(title=
+    '各部门占比饼图', pos_left='center'), legend_opts=opts.LegendOpts(pos_bottom=0)
+    ).set_series_opts(label_opts=opts.LabelOpts(formatter='{b}: {d}%'))
+line = Line().add_xaxis(df['年份'].dt.strftime('%Y-%m').tolist()
+    ).set_global_opts(title_opts=opts.TitleOpts(title='各部门占比折线图', pos_left=
+    'center'), yaxis_opts=opts.AxisOpts(name='占比', axislabel_opts={
+    'formatter': '{value}'}), legend_opts=opts.LegendOpts(pos_bottom=0))
+for col in df.columns[1:]:
+    line.add_yaxis(col, df[col].tolist())
+mix = bar.overlap(line).overlap(pie)
+print(mix.dump_options_with_quotes())
+            ```
+2023-07-13 04:22:19 [INFO] error_code=context_length_exceeded error_message="This model's maximum context length is 8193 tokens. However, you requested 13213 tokens (5021 in the messages, 8192 in the completion). Please reduce the length of the messages or completion." error_param=messages error_type=invalid_request_error message='OpenAI API error received' stream_error=False
+2023-07-13 04:22:19 [INFO] error_code=429 error_message='Requests to the Creates a completion for the chat message Operation under Azure OpenAI API version 2023-03-15-preview have exceeded token rate limit of your current OpenAI S0 pricing tier. Please retry after 60 seconds. Please go here: https://aka.ms/oai/quotaincrease if you would like to further increase the default rate limit.' error_param=None error_type=None message='OpenAI API error received' stream_error=False
+2023-07-13 04:22:20 [INFO] error_code=429 error_message='Requests to the Creates a completion for the chat message Operation under Azure OpenAI API version 2023-03-15-preview have exceeded token rate limit of your current OpenAI S0 pricing tier. Please retry after 59 seconds. Please go here: https://aka.ms/oai/quotaincrease if you would like to further increase the default rate limit.' error_param=None error_type=None message='OpenAI API error received' stream_error=False
+2023-07-13 04:22:20 [INFO] error_code=429 error_message='Requests to the Creates a completion for the chat message Operation under Azure OpenAI API version 2023-03-15-preview have exceeded token rate limit of your current OpenAI S0 pricing tier. Please retry after 59 seconds. Please go here: https://aka.ms/oai/quotaincrease if you would like to further increase the default rate limit.' error_param=None error_type=None message='OpenAI API error received' stream_error=False
+2023-07-13 04:25:29 [INFO] 
+            Code running:
+            ```
+            import pandas as pd
+from pyecharts.charts import Line
+from pyecharts import options as opts
+df = df
+df['年份'] = pd.to_datetime(df['年份'])
+line = Line().add_xaxis(df['年份'].dt.strftime('%Y-%m').tolist()).add_yaxis(
+    '居民部门', df['居民部门'].tolist()).add_yaxis('非金融企业部门', df['非金融企业部门'].tolist()
+    ).add_yaxis('政府部门', df['政府部门'].tolist()).add_yaxis('中央政府', df['中央政府'].
+    tolist()).add_yaxis('地方政府', df['地方政府'].tolist()).add_yaxis('实体经济部门', df
+    ['实体经济部门'].tolist()).add_yaxis('金融部门资产方', df['金融部门资产方'].tolist()
+    ).add_yaxis('金融部门负债方', df['金融部门负债方'].tolist()).set_global_opts(title_opts
+    =opts.TitleOpts(title='不同年份各部门的变化趋势', pos_left='center'), xaxis_opts=
+    opts.AxisOpts(name='年份'), yaxis_opts=opts.AxisOpts(name='亿人民币'))
+echarts_json = line.dump_options_with_quotes()
+print(echarts_json)
+            ```
+2023-07-13 04:25:43 [INFO] 图表描述：该图表展示了不同年份各部门的变化趋势，包括居民部门、非金融企业部门、政府部门、中央政府、地方政府、实体经济部门、金融部门资产方和金融部门负债方。从图表中可以看出，实体经济部门是最大的部门，其值在1992年至2000年期间从93.8亿人民币增长到281.8亿人民币。非金融企业部门也是一个重要的部门，其值在同一期间从82.3亿人民币增长到167亿人民币。政府部门和中央政府的值相对较小，但也有所增长。另外，金融部门资产方和金融部门负债方的值在1992年至2000年期间也有所增长，但增长速度相对较慢。总体来看，实体经济部门和非金融企业部门是中国经济的两个主要支柱，它们的增长对于整个经济的稳定和发展具有重要意义。
+2023-07-13 04:25:52 [INFO] 
+            Code running:
+            ```
+            import pandas as pd
+from pyecharts import Scatter
+df = df
+df['年份'] = pd.to_datetime(df['年份'])
+df = df
+scatter = Scatter('政府部门与实体经济部门之间的关系')
+scatter.add('政府部门', df.index, df['政府部门'], yaxis_name='亿元')
+scatter.add('实体经济部门', df.index, df['实体经济部门'], yaxis_name='亿元')
+scatter.render()
+heatmap = HeatMap('政府部门与实体经济部门之间的关系')
+heatmap.add('', df.index, df.columns, df.values, is_visualmap=True,
+    visual_text_color='#000')
+heatmap.render()
+            ```
+2023-07-13 04:26:02 [INFO] 
+            Code running:
+            ```
+            from pyecharts import options as opts
+from pyecharts.charts import Bar
+df1 = df[['年份', '金融部门资产方', '金融部门负债方']]
+df1 = df1.set_index('年份')
+bar = Bar().add_xaxis(df1.index.tolist()).add_yaxis('金融部门资产方', df1[
+    '金融部门资产方'].tolist(), stack='stack1', label_opts=opts.LabelOpts(is_show=
+    False)).add_yaxis('金融部门负债方', df1['金融部门负债方'].tolist(), stack='stack1',
+    label_opts=opts.LabelOpts(is_show=False)).set_global_opts(title_opts=
+    opts.TitleOpts(title='金融部门资产方和金融部门负债方关系', pos_left='center'),
+    yaxis_opts=opts.AxisOpts(name='亿元'), xaxis_opts=opts.AxisOpts(name='年份'))
+echarts_json = bar.dump_options_with_quotes()
+print(echarts_json)
+            ```
+2023-07-13 04:26:12 [INFO] 图表描述：这份图表数据展示了金融部门资产方和负债方在过去30年间的亿元资产和负债情况。从数据中可以看出，金融部门资产方的资产总额呈逐年增长的趋势，从7.8亿元增长到了22.5亿元，增长率非常迅速。相比之下，金融部门负债方的负债总额也呈逐年增长的趋势，但增长速度比资产方慢一些。这份数据还显示，金融部门资产方的资产总额要高于负债方的负债总额，这意味着金融部门整体上是盈利的。此外，两者的标准差都比较大，说明这些数据的分布比较广泛，存在一定程度的波动性。
+2023-07-13 04:26:23 [INFO] 
+            Code running:
+            ```
+            import pandas as pd
+from pyecharts import options as opts
+from pyecharts.charts import Bar
+df = df
+df['年份'] = pd.to_datetime(df['年份'])
+df = df
+df = df
+bar = Bar().add_xaxis(df.index.strftime('%Y-%m').tolist()).add_yaxis('中央政府',
+    df['中央政府'].tolist(), stack='stack1').add_yaxis('地方政府', df['地方政府'].
+    tolist(), stack='stack1').set_series_opts(label_opts=opts.LabelOpts(
+    is_show=False)).set_global_opts(title_opts=opts.TitleOpts(title=
+    '中央政府和地方政府资产', pos_left='center'), xaxis_opts=opts.AxisOpts(name='年份'),
+    yaxis_opts=opts.AxisOpts(name='资产（万亿）'))
+echarts_json = bar.dump_options_with_quotes()
+print(echarts_json)
+            ```
+2023-07-13 04:26:29 [INFO] 
+            Code running:
+            ```
+            import pandas as pd
+from pyecharts import Scatter
+df = df
+scatter = Scatter(title='居民部门和非金融企业部门之间的关系', title_pos='center', width=800,
+    height=400)
+scatter.add('居民部门和非金融企业部门', df['居民部门'], df['非金融企业部门'], xaxis_name='居民部门',
+    yaxis_name='非金融企业部门', xaxis_name_gap=30, yaxis_name_gap=30)
+scatter_json = scatter.dump_options_with_quotes()
+print(scatter_json)
+            ```

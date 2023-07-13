@@ -53,6 +53,7 @@ def gpt(message):
             max_tokens=cfg.MAX_TOKENS,
             frequency_penalty=0.0,
             presence_penalty=0.0,
+            stream=cfg.STREAM
         )
     else:
         response = openai.ChatCompletion.create(
@@ -62,8 +63,12 @@ def gpt(message):
             max_tokens=cfg.MAX_TOKENS,
             frequency_penalty=0.0,
             presence_penalty=0.0,
+            stream=cfg.STREAM
         )
-    content = response['choices'][0].get("message").get("content")
+    if cfg.STREAM:
+        content = response.get("choices")[0]['delta'].get('content', '')
+    else:
+        content = response['choices'][0].get("message").get("content", '')
     return content
 
 
