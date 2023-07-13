@@ -17,12 +17,10 @@ sys.path.append(str(ABS_PATH))
 from utils import utils
 from prompts import Prompts
 from configs.constants import *
-from stats_data import get_stats_data
+from analyse.stats_data import get_stats_data
 
-report_name = "report.json"
 
 class AIAnalyse:
-
     def __init__(self):
         self._max_retries = 3
         self.prompts = None
@@ -80,7 +78,7 @@ class AIAnalyse:
         self._save_report()
 
     def _save_report(self):
-        with open(report_name, "w") as f:
+        with open(REPORT_NAME, "w") as f:
             f.write(json.dumps(self.reports, indent=2, ensure_ascii=False))
 
     def __call__(self,

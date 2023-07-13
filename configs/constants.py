@@ -12,3 +12,5 @@ CHARTS_EXPORT_PATH = "export"
 
 DATA_DETAIL_LIMIT = 30
 
+REPORT_NAME = "report.json"
+

@@ -3,31 +3,30 @@ import os.path
 import sys
 import time
 from pathlib import Path
+import pandas as pd
 import streamlit as st
 from streamlit_echarts import st_echarts
 
 ABS_PATH = Path(__file__).parent.absolute()
 sys.path.append(str(ABS_PATH))
 
+from prompts import Prompts
+from utils import utils
+from analyse.ai_analyse import AIAnalyse
+from analyse.stats_data import get_stats_data
 
-class AiDataAnalysisFrontend:
+
+class AiDataAnalysisFrontend(AIAnalyse):
     def __init__(self):
+        super().__init__()
         st.set_page_config(page_title="Auto Data Analysis", page_icon="📊", layout="wide")
         st.markdown('<h1 style="text-align: center;">AI Data Analysis</h1>', unsafe_allow_html=True)
 
-    # def draw_page(self):
-    #     for root, path, names in os.walk(os.path.join(ABS_PATH, "export")):
-    #         for name in names:
-    #             with open(os.path.join(root, name), "r") as f:
-    #                 content = f.read()
-    #                 option = json.loads(content)
-    #                 st_echarts(option, height="600px", width="100%")
-    #                 st.write(name.split(".")[0])
-    #                 time.sleep(1)
-
     def report_demo(self):
+        st.markdown('---', unsafe_allow_html=True)
+        st.markdown('<h3 style="text-align: center;">Example of AI analysis</h3>', unsafe_allow_html=True)
         with st.spinner("正在根据您的数据生成数据分析建议……"):
-            time.sleep(2)
+            time.sleep(0.5)
             with open(os.path.join(ABS_PATH, "analyse", "report_demo.json"), "r") as f:
                 reports = json.loads(f.read())
             all_charts_path = []
@@ -35,21 +34,90 @@ class AiDataAnalysisFrontend:
                 for name in names:
                     charts_path = os.path.join(root, name)
                     all_charts_path.append(charts_path)
-            time.sleep(2)
+            time.sleep(0.5)
         for report in reports:
             with st.spinner(f"正在根据建议：`{report.get('suggestion')}`生成数据分析图表……"):
                 charts_path = [path for path in all_charts_path if report.get("title") in path]
                 charts_path = charts_path[0] if charts_path else ""
                 with open(charts_path, "r") as f:
                     charts = json.loads(f.read())
-                time.sleep(5)
+                time.sleep(0.5)
                 st_echarts(options=charts, height="600px", width="100%")
 
             with st.spinner(f"正在根据数据图表总结描述信息……"):
-                time.sleep(2)
+                time.sleep(0.5)
                 st.write(f"{report.get('description')}")
             st.success(f"`{report.get('suggestion')}` 分析完成")
         st.success("数据分析完成")
+
+    def report(self):
+        # st.write("数据分析报告")
+        # st.markdown('---', unsafe_allow_html=True)
+        col1, col2 = st.columns([3,1])
+        with col1:
+            file_data = st.file_uploader(label="", type=["csv", "xlsx"], accept_multiple_files=False, label_visibility="collapsed")
+        with col2:
+            innercol1, innercol2, innercol3 = st.columns(3)
+            with innercol1:
+                show_code = st.checkbox("显示代码", value=True)
+                start_analysis = st.button("开始分析")
+            with innercol2:
+                save_charts = st.checkbox("保存图表")
+            with innercol3:
+                charts_description = st.checkbox("图表描述", value=True)
+        if file_data is None:
+            self.report_demo()
+        else:
+            data_frame = pd.read_csv(file_data, index_col=0) if file_data.name.endswith(".csv") else pd.read_excel(file_data, engine="openpyxl")
+            df_head = data_frame.head()
+            st.dataframe(df_head)
+            num_rows, num_columns = data_frame.shape
+            self.prompts = Prompts(num_rows=num_rows, num_cols=num_columns, df_head=df_head)
+            highlight_prompt = self.prompts.generate_highlight_prompt()
+            print("建议生成中...")
+            if start_analysis:
+                with st.spinner("正在根据您的数据生成数据分析建议……"):
+                    highlight_response = utils.gpt(highlight_prompt)
+                    suggestions_list = self._get_suggestion(highlight_response)
+                for each_suggestion in suggestions_list:
+                    # try:
+                        with st.spinner(f"正在根据建议：`{each_suggestion}`生成数据分析图表……"):
+                            item = {"suggestion": each_suggestion}
+                            code_prompt = self.prompts.generate_python_code_prompt_by_suggestion(each_suggestion)
+                            code = self.generate_code(code_prompt)
+                            self.global_params["suggestion"] = each_suggestion
+                            self.global_params.update({"suggestion": each_suggestion, "code": code})
+                            if show_code:
+                                print(self.global_params.get("code", ""))
+                                st.code(code)
+                            print("代码执行中...")
+                        json_str_result = self.run_code(code, data_frame)
+                        st_echarts(options=json.loads(json_str_result), height="600px", width="100%")
+                        if save_charts and json_str_result:
+                            self.save_charts_json(json_str_result)
+                            print(f"图表已保存至")
+                        if charts_description and json_str_result:
+                            with st.spinner(f"正在根据数据图表总结描述信息……"):
+                                stats_data = get_stats_data(json_str_result)
+                                stats_data = stats_data if stats_data else {}
+                                item.update({"title": stats_data.get("title", "")})
+                                description_prompt = self.prompts.generate_charts_description_prompt(**stats_data)
+                                description_response = utils.gpt(description_prompt)
+                                descriptions = self._get_description(description_response)
+                                print(f"图表描述：{descriptions}")
+                                st.markdown(descriptions, unsafe_allow_html=True)
+                                item.update({"description": descriptions})
+                                stats_data.pop("description", None)
+                                utils.log(f"图表描述：{descriptions}")
+                        else:
+                            descriptions = ""
+                        self.reports.append(item)
+                    # except Exception as e:
+                    #     print(f"Unable to run code for suggestion: {each_suggestion}, error: {e}")
+                    #     continue
+
+
+
 
 # def markdown_to_pdf():
 #     import markdown
@@ -69,5 +137,5 @@ class AiDataAnalysisFrontend:
 
 if __name__ == '__main__':
     client = AiDataAnalysisFrontend()
-    client.report_demo()
-
+    # client.report_demo()
+    client.report()
