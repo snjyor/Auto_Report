@@ -21,4 +21,4 @@ ENGINE_TOKENS_MAPPING = {
         "davinci": 4097  # text-davinci-003
     }
 MAX_TOKENS = ENGINE_TOKENS_MAPPING.get(AZURE_GPT_ENGINE)
-STREAM = True
+

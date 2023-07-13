@@ -51,24 +51,25 @@ class AiDataAnalysisFrontend(AIAnalyse):
         st.success("数据分析完成")
 
     def report(self):
-        # st.write("数据分析报告")
-        # st.markdown('---', unsafe_allow_html=True)
-        col1, col2 = st.columns([3,1])
+        col1, col2, col3, col4 = st.columns([7, 1, 1, 1])
         with col1:
-            file_data = st.file_uploader(label="", type=["csv", "xlsx"], accept_multiple_files=False, label_visibility="collapsed")
+            file_data = st.file_uploader(label="",
+                                         type=["csv", "xlsx"],
+                                         accept_multiple_files=False,
+                                         # label_visibility="collapsed"
+                                         )
         with col2:
-            innercol1, innercol2, innercol3 = st.columns(3)
-            with innercol1:
-                show_code = st.checkbox("显示代码", value=True)
-                start_analysis = st.button("开始分析")
-            with innercol2:
-                save_charts = st.checkbox("保存图表")
-            with innercol3:
-                charts_description = st.checkbox("图表描述", value=True)
+            show_code = st.checkbox("显示代码", value=True)
+            start_analysis = st.button("开始分析")
+        with col3:
+            save_charts = st.checkbox("保存图表")
+        with col4:
+            charts_description = st.checkbox("图表描述", value=True)
         if file_data is None:
             self.report_demo()
         else:
-            data_frame = pd.read_csv(file_data, index_col=0) if file_data.name.endswith(".csv") else pd.read_excel(file_data, engine="openpyxl")
+            data_frame = pd.read_csv(file_data, index_col=0) if file_data.name.endswith(".csv") else pd.read_excel(
+                file_data, engine="openpyxl")
             df_head = data_frame.head()
             st.dataframe(df_head, )
             num_rows, num_columns = data_frame.shape
@@ -85,14 +86,16 @@ class AiDataAnalysisFrontend(AIAnalyse):
                             item = {"suggestion": each_suggestion}
                             code_prompt = self.prompts.generate_python_code_prompt_by_suggestion(each_suggestion)
                             code = self.generate_code(code_prompt)
-                            self.global_params["suggestion"] = each_suggestion
-                            self.global_params.update({"suggestion": each_suggestion, "code": code})
-                            print("代码执行中...")
-                            json_str_result = self.run_code(code, data_frame)
                             if show_code:
                                 print(self.global_params.get("code", ""))
                                 with st.expander("查看代码", expanded=False):
                                     st.code(code)
+                            self.global_params["suggestion"] = each_suggestion
+                            self.global_params.update({"suggestion": each_suggestion, "code": code})
+                            print("代码执行中...")
+                            json_str_result = self.run_code(code, data_frame)
+                            with st.expander("查看数据", expanded=False):
+                                st.write(json.loads(json_str_result))
                             st_echarts(options=json.loads(json_str_result), height="600px", width="100%")
                             if save_charts and json_str_result:
                                 self.save_charts_json(json_str_result)
@@ -117,8 +120,7 @@ class AiDataAnalysisFrontend(AIAnalyse):
                         print(f"Unable to run code for suggestion: {each_suggestion}, error: {e}")
                         st.error(f"很抱歉，无法为您生成该建议:`{each_suggestion}`图表")
                         continue
-
-
+            st.success("数据分析完成")
 
 
 # def markdown_to_pdf():
