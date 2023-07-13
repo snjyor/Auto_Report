@@ -6,3 +6,4 @@ astor
 pyecharts
 streamlit
 streamlit_echarts
+with_timeout
