@@ -119,6 +119,8 @@ class AiDataAnalysisFrontend(AIAnalyse):
                     except Exception as e:
                         print(f"Unable to run code for suggestion: {each_suggestion}, error: {e}")
                         st.error(f"很抱歉，无法为您生成该建议:`{each_suggestion}`图表")
+                        with st.expander("查看错误信息", expanded=False):
+                            st.write(e)
                         continue
                 st.success("数据分析完成")
 
