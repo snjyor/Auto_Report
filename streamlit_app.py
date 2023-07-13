@@ -120,7 +120,7 @@ class AiDataAnalysisFrontend(AIAnalyse):
                         print(f"Unable to run code for suggestion: {each_suggestion}, error: {e}")
                         st.error(f"很抱歉，无法为您生成该建议:`{each_suggestion}`图表")
                         continue
-            st.success("数据分析完成")
+                st.success("数据分析完成")
 
 
 # def markdown_to_pdf():
