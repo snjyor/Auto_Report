@@ -1850,3 +1850,1681 @@ grid.render_notebook()
 通过对描述性信息的分析，可以看出四个变量的均值、标准差、最小值、最大值、中位数和四分位数等统计指标。其中，居民部门和非金融企业部门的均值和中位数都呈现出增长的趋势，而标准差则在不断减小。这说明资产和负债总量的增长趋势越来越稳定。
 
 综上所述，该图表表明了居民部门和非金融企业部门资产和负债总量的变化趋势，以及它们之间的差异。同时，描述性信息提供了更加具体的统计指标，进一步展示了这些变量的分布情况和趋势。
+2023-07-16 17:08:03 [INFO] 
+            Code running:
+            ```
+            import pandas as pd
+from pyecharts.charts import Line
+from pyecharts import options as opts
+df = df
+df['年份'] = pd.to_datetime(df['年份'], format='%Y-%m')
+line = Line()
+line.add_xaxis(df['年份'].dt.strftime('%Y-%m').tolist())
+line.add_yaxis('居民部门', df['居民部门'].tolist())
+line.add_yaxis('非金融企业部门', df['非金融企业部门'].tolist())
+line.add_yaxis('政府部门', df['政府部门'].tolist())
+line.add_yaxis('中央政府', df['中央政府'].tolist())
+line.add_yaxis('地方政府', df['地方政府'].tolist())
+line.add_yaxis('实体经济部门', df['实体经济部门'].tolist())
+line.add_yaxis('金融部门资产方', df['金融部门资产方'].tolist())
+line.add_yaxis('金融部门负债方', df['金融部门负债方'].tolist())
+line.set_global_opts(title_opts=opts.TitleOpts(title='各部门在不同时间点的资产负债情况',
+    pos_left='center'), xaxis_opts=opts.AxisOpts(name='时间'), yaxis_opts=
+    opts.AxisOpts(name='单位：万亿元'))
+echarts_json = line.dump_options_with_quotes()
+echarts_json
+            ```
+2023-07-16 17:11:13 [INFO] 图表描述：该图表展示了不同部门在不同时间点的资产负债情况。从整体趋势看，实体经济部门的资产总额一直呈现增长趋势，而政府部门的资产总额则呈现出波动上升的趋势。非金融企业部门的资产总额在1997年之前一直在增长，之后开始下降，但整体趋势仍呈现增长态势。居民部门的资产总额也呈现出上升趋势，但波动较大。
+
+在各部门中，实体经济部门的资产总额最高，其次是非金融企业部门，再次是地方政府。金融部门的资产负债总额相对较小，但是在1997年之后呈现出明显的增长趋势。
+
+从各部门的描述性统计信息来看，实体经济部门的资产总额的标准差最大，说明其资产总额的波动性最大。而政府部门的资产总额的标准差较小，说明其资产总额的波动性相对较小。
+
+综上所述，该图表表明实体经济部门是整个经济体系中最重要的部门，其资产总额一直呈现增长趋势。非金融企业部门的资产总额也呈现增长态势，但在1997年之后开始下降。政府部门的资产总额波动较小，但也呈现出上升趋势。金融部门的资产负债总额相对较小，但在1997年之后呈现出明显的增长趋势。
+2023-07-16 17:11:42 [INFO] 
+            Code running:
+            ```
+            import pandas as pd
+from pyecharts import options as opts
+from pyecharts.charts import HeatMap
+df = df
+data = []
+for i in range(len(df)):
+    year = df.iloc[i, 0].split('-')[0]
+    quarter = df.iloc[i, 0].split('-')[1]
+    data.append([quarter, year, df.iloc[i, 1], df.iloc[i, 2], df.iloc[i, 3],
+        df.iloc[i, 4], df.iloc[i, 5], df.iloc[i, 6], df.iloc[i, 7], df.iloc
+        [i, 8]])
+heatmap = HeatMap()
+heatmap.add_xaxis(['Q1', 'Q2', 'Q3', 'Q4'])
+heatmap.add_yaxis('', data)
+heatmap.set_global_opts(title_opts=opts.TitleOpts(title='各部门资产负债情况热力图',
+    pos_left='center'), visualmap_opts=opts.VisualMapOpts(min_=0, max_=200,
+    is_piecewise=True, orient='horizontal', pos_bottom='10%'), xaxis_opts=
+    opts.AxisOpts(name='季度'), yaxis_opts=opts.AxisOpts(name='年份'))
+heatmap.set_series_opts(label_opts=opts.LabelOpts(is_show=True, position=
+    'inside', formatter='{c}'))
+echarts_json = heatmap.dump_options_with_quotes()
+print(echarts_json)
+            ```
+2023-07-16 17:11:59 [INFO] 
+            Code running:
+            ```
+            import pandas as pd
+from pyecharts import options as opts
+from pyecharts.charts import Bar
+df = df
+x_data = df['年份'].tolist()
+y_data1 = df['居民部门'].tolist()
+y_data2 = df['非金融企业部门'].tolist()
+y_data3 = df['政府部门'].tolist()
+y_data4 = df['中央政府'].tolist()
+y_data5 = df['地方政府'].tolist()
+y_data6 = df['实体经济部门'].tolist()
+y_data7 = df['金融部门资产方'].tolist()
+y_data8 = df['金融部门负债方'].tolist()
+bar = Bar().add_xaxis(x_data).add_yaxis('居民部门', y_data1).add_yaxis('非金融企业部门',
+    y_data2).add_yaxis('政府部门', y_data3).add_yaxis('中央政府', y_data4).add_yaxis(
+    '地方政府', y_data5).add_yaxis('实体经济部门', y_data6).add_yaxis('金融部门资产方', y_data7
+    ).add_yaxis('金融部门负债方', y_data8).set_global_opts(title_opts=opts.
+    TitleOpts(title='各部门在同一时间点的资产负债情况', pos_left='center'), xaxis_opts=opts
+    .AxisOpts(name='年份'), yaxis_opts=opts.AxisOpts(name='亿', axislabel_opts
+    =opts.LabelOpts(formatter='{value}')))
+echarts_json = bar.dump_options_with_quotes()
+print(echarts_json)
+            ```
+2023-07-16 17:13:21 [INFO] 图表描述：该图表展示了各部门在同一时间点的资产负债情况。其中，非金融企业部门的资产总额最高，达到了1670亿，而实体经济部门的资产总额也相当可观，达到了281.8亿。政府部门和金融部门资产方的资产总额均在70亿以下，而金融部门负债方的负债总额也在70亿以下。居民部门的资产总额在63.3亿以内，地方政府的资产总额则在51.5亿以内。此外，各部门的资产总额和负债总额均呈逐年上升的趋势，表明整个经济体系的总体资产负债水平正在不断提高。
+2023-07-16 17:13:44 [INFO] 
+            Code running:
+            ```
+            import pandas as pd
+from pyecharts.charts import Bar
+from pyecharts import options as opts
+df = df
+df['年份'] = pd.to_datetime(df['年份'])
+df.set_index('年份', inplace=True)
+bar = Bar().add_xaxis(df.index.strftime('%Y-%m').tolist()).add_yaxis('居民部门',
+    df['居民部门'].tolist(), stack='stack1').add_yaxis('非金融企业部门', df['非金融企业部门']
+    .tolist(), stack='stack1').add_yaxis('政府部门', df['政府部门'].tolist(), stack
+    ='stack1').add_yaxis('中央政府', df['中央政府'].tolist(), stack='stack2'
+    ).add_yaxis('地方政府', df['地方政府'].tolist(), stack='stack2').add_yaxis('实体经济部门'
+    , df['实体经济部门'].tolist(), stack='stack2').add_yaxis('金融部门资产方', df[
+    '金融部门资产方'].tolist(), stack='stack3').add_yaxis('金融部门负债方', df['金融部门负债方']
+    .tolist(), stack='stack3').set_global_opts(title_opts=opts.TitleOpts(
+    title='各部门在不同时间点的资产负债情况', pos_left='center'), yaxis_opts=opts.AxisOpts(
+    name='亿元'), xaxis_opts=opts.AxisOpts(name='时间'))
+echarts_json = bar.dump_options_with_quotes()
+            ```
+2023-07-16 17:14:55 [INFO] 图表描述：该份图表数据展示了不同部门在不同时间点的资产负债情况。其中，非金融企业部门的资产总额一直保持在较高的水平，且呈现逐年上升的趋势。政府部门和地方政府的资产总额逐年增长，但增长速度较为缓慢。中央政府的资产总额相对较低，但也呈现逐年上升的趋势。实体经济部门的资产总额一直保持在较高的水平，且呈现逐年上升的趋势。金融部门的资产总额和负债总额均呈现逐年上升的趋势，但资产总额高于负债总额。
+
+在各部门中，实体经济部门的资产总额最高，其次是非金融企业部门和金融部门的资产总额。政府部门和地方政府的资产总额相对较低。同时，金融部门的资产总额和负债总额均较为接近，而其他部门的资产总额均高于负债总额。
+
+综上所述，该份图表数据表明实体经济部门、非金融企业部门和金融部门的资产总额较高，而政府部门和地方政府的资产总额相对较低。同时，各部门的资产总额均呈现逐年上升的趋势，而金融部门的资产总额和负债总额均较为接近。
+2023-07-16 17:15:13 [INFO] 
+            Code running:
+            ```
+            import pandas as pd
+from pyecharts.charts import Bar, Pie
+from pyecharts import options as opts
+df = df
+df['年份'] = pd.to_datetime(df['年份'])
+df = df
+pie_data = [('中央政府', df['中央政府'].sum()), ('地方政府', df['地方政府'].sum())]
+pie_chart = Pie().add('', pie_data).set_global_opts(title_opts=opts.
+    TitleOpts(title='中央政府和地方政府资产负债情况'), legend_opts=opts.LegendOpts(orient=
+    'vertical', pos_top='15%', pos_left='2%')).set_series_opts(label_opts=
+    opts.LabelOpts(formatter='{b}: {d}%'))
+bar_data = df[['中央政府', '地方政府']].stack().reset_index()
+bar_data.columns = ['年份', '部门', '值']
+bar_chart = Bar().add_xaxis(list(df.index.astype(str))).add_yaxis('中央政府',
+    bar_data[bar_data['部门'] == '中央政府']['值'].tolist()).add_yaxis('地方政府',
+    bar_data[bar_data['部门'] == '地方政府']['值'].tolist()).set_global_opts(
+    title_opts=opts.TitleOpts(title='中央政府和地方政府资产负债情况'), legend_opts=opts.
+    LegendOpts(orient='vertical', pos_top='15%', pos_left='2%'), yaxis_opts
+    =opts.AxisOpts(name='亿元'), xaxis_opts=opts.AxisOpts(name='年份'))
+print(pie_chart.dump_options())
+print(bar_chart.dump_options())
+            ```
+2023-07-16 17:16:00 [INFO] Unable to parse the output: {
+    "animation": true,
+    "animationThreshold": 2000,
+    "animationDuration": 1000,
+    "animationEasing": "cubicOut",
+    "animationDelay": 0,
+    "animationDurationUpdate": 300,
+    "animationEasingUpdate": "cubicOut",
+    "animationDelayUpdate": 0,
+    "aria": {
+        "enabled": false
+    },
+    "color": [
+        "#5470c6",
+        "#91cc75",
+        "#fac858",
+        "#ee6666",
+        "#73c0de",
+        "#3ba272",
+        "#fc8452",
+        "#9a60b4",
+        "#ea7ccc"
+    ],
+    "series": [
+        {
+            "type": "pie",
+            "colorBy": "data",
+            "legendHoverLink": true,
+            "selectedMode": false,
+            "selectedOffset": 10,
+            "clockwise": true,
+            "startAngle": 90,
+            "minAngle": 0,
+            "minShowLabelAngle": 0,
+            "avoidLabelOverlap": true,
+            "stillShowZeroSum": true,
+            "percentPrecision": 2,
+            "showEmptyCircle": true,
+            "emptyCircleStyle": {
+                "color": "lightgray",
+                "borderColor": "#000",
+                "borderWidth": 0,
+                "borderType": "solid",
+                "borderDashOffset": 0,
+                "borderCap": "butt",
+                "borderJoin": "bevel",
+                "borderMiterLimit": 10,
+                "opacity": 1
+            },
+            "data": [
+                {
+                    "name": "\u4e2d\u592e\u653f\u5e9c",
+                    "value": 1567.6999999999998
+                },
+                {
+                    "name": "\u5730\u65b9\u653f\u5e9c",
+                    "value": 3337.6
+                }
+            ],
+            "radius": [
+                "0%",
+                "75%"
+            ],
+            "center": [
+                "50%",
+                "50%"
+            ],
+            "label": {
+                "show": true,
+                "margin": 8,
+                "formatter": "{b}: {d}%"
+            },
+            "labelLine": {
+                "show": true,
+                "showAbove": false,
+                "length": 15,
+                "length2": 15,
+                "smooth": false,
+                "minTurnAngle": 90,
+                "maxSurfaceAngle": 90
+            },
+            "rippleEffect": {
+                "show": true,
+                "brushType": "stroke",
+                "scale": 2.5,
+                "period": 4
+            }
+        }
+    ],
+    "legend": [
+        {
+            "data": [
+                "\u4e2d\u592e\u653f\u5e9c",
+                "\u5730\u65b9\u653f\u5e9c"
+            ],
+            "selected": {},
+            "show": true,
+            "left": "2%",
+            "top": "15%",
+            "orient": "vertical",
+            "padding": 5,
+            "itemGap": 10,
+            "itemWidth": 25,
+            "itemHeight": 14,
+            "backgroundColor": "transparent",
+            "borderColor": "#ccc",
+            "borderWidth": 1,
+            "borderRadius": 0,
+            "pageButtonItemGap": 5,
+            "pageButtonPosition": "end",
+            "pageFormatter": "{current}/{total}",
+            "pageIconColor": "#2f4554",
+            "pageIconInactiveColor": "#aaa",
+            "pageIconSize": 15,
+            "animationDurationUpdate": 800,
+            "selector": false,
+            "selectorPosition": "auto",
+            "selectorItemGap": 7,
+            "selectorButtonGap": 10
+        }
+    ],
+    "tooltip": {
+        "show": true,
+        "trigger": "item",
+        "triggerOn": "mousemove|click",
+        "axisPointer": {
+            "type": "line"
+        },
+        "showContent": true,
+        "alwaysShowContent": false,
+        "showDelay": 0,
+        "hideDelay": 100,
+        "enterable": false,
+        "confine": false,
+        "appendToBody": false,
+        "transitionDuration": 0.4,
+        "textStyle": {
+            "fontSize": 14
+        },
+        "borderWidth": 0,
+        "padding": 5,
+        "order": "seriesAsc"
+    },
+    "title": [
+        {
+            "show": true,
+            "text": "\u4e2d\u592e\u653f\u5e9c\u548c\u5730\u65b9\u653f\u5e9c\u8d44\u4ea7\u8d1f\u503a\u60c5\u51b5",
+            "target": "blank",
+            "subtarget": "blank",
+            "padding": 5,
+            "itemGap": 10,
+            "textAlign": "auto",
+            "textVerticalAlign": "auto",
+            "triggerEvent": false
+        }
+    ]
+}
+{
+    "animation": true,
+    "animationThreshold": 2000,
+    "animationDuration": 1000,
+    "animationEasing": "cubicOut",
+    "animationDelay": 0,
+    "animationDurationUpdate": 300,
+    "animationEasingUpdate": "cubicOut",
+    "animationDelayUpdate": 0,
+    "aria": {
+        "enabled": false
+    },
+    "color": [
+        "#5470c6",
+        "#91cc75",
+        "#fac858",
+        "#ee6666",
+        "#73c0de",
+        "#3ba272",
+        "#fc8452",
+        "#9a60b4",
+        "#ea7ccc"
+    ],
+    "series": [
+        {
+            "type": "bar",
+            "name": "\u4e2d\u592e\u653f\u5e9c",
+            "legendHoverLink": true,
+            "data": [
+                3.9,
+                3.9,
+                3.8,
+                3.7,
+                3.6,
+                3.5,
+                3.4,
+                3.3,
+                3.1,
+                3.1,
+                3.1,
+                3.0,
+                3.0,
+                3.0,
+                3.0,
+                3.1,
+                3.1,
+                3.1,
+                3.2,
+                3.2,
+                3.3,
+                3.4,
+                3.5,
+                3.6,
+                3.7,
+                3.8,
+                4.0,
+                4.1,
+                4.2,
+                4.3,
+                4.4,
+                4.5,
+                4.6,
+                4.8,
+                5.0,
+                5.2,
+                5.5,
+                5.8,
+                6.1,
+                6.4,
+                6.7,
+                6.9,
+                7.2,
+                7.4,
+                7.6,
+                7.8,
+                8.0,
+                8.1,
+                8.3,
+                8.5,
+                8.7,
+                9.0,
+                9.2,
+                9.4,
+                9.6,
+                9.9,
+                10.0,
+                10.2,
+                10.3,
+                10.4,
+                10.5,
+                10.5,
+                10.6,
+                10.7,
+                10.9,
+                12.0,
+                13.7,
+                15.1,
+                16.2,
+                16.2,
+                16.2,
+                16.4,
+                16.3,
+                16.3,
+                16.3,
+                16.6,
+                16.7,
+                17.0,
+                16.9,
+                17.6,
+                17.9,
+                18.6,
+                19.3,
+                20.3,
+                21.1,
+                21.7,
+                22.4,
+                23.4,
+                23.9,
+                21.7,
+                19.6,
+                21.2,
+                21.4,
+                19.9,
+                21.1,
+                21.1,
+                20.5,
+                19.2,
+                19.5,
+                20.1,
+                19.8,
+                19.5,
+                19.2,
+                20.4,
+                20.0,
+                21.0,
+                21.6,
+                22.1,
+                21.6,
+                23.4,
+                24.6,
+                25.7,
+                25.3,
+                24.8,
+                25.3,
+                26.0,
+                26.5,
+                27.4,
+                29.4,
+                28.9,
+                29.0,
+                30.1
+            ],
+            "realtimeSort": false,
+            "showBackground": false,
+            "stackStrategy": "samesign",
+            "cursor": "pointer",
+            "barMinHeight": 0,
+            "barCategoryGap": "20%",
+            "barGap": "30%",
+            "large": false,
+            "largeThreshold": 400,
+            "seriesLayoutBy": "column",
+            "datasetIndex": 0,
+            "clip": true,
+            "zlevel": 0,
+            "z": 2,
+            "label": {
+                "show": true,
+                "margin": 8
+            }
+        },
+        {
+            "type": "bar",
+            "name": "\u5730\u65b9\u653f\u5e9c",
+            "legendHoverLink": true,
+            "data": [
+                8.3,
+                8.1,
+                8.2,
+                8.3,
+                7.8,
+                8.0,
+                9.4,
+                8.7,
+                8.1,
+                8.2,
+                7.6,
+                9.0,
+                8.7,
+                9.1,
+                9.0,
+                9.6,
+                9.6,
+                9.2,
+                8.4,
+                9.1,
+                10.4,
+                8.5,
+                9.1,
+                13.0,
+                15.9,
+                15.1,
+                15.9,
+                17.1,
+                18.8,
+                17.5,
+                18.3,
+                18.7,
+                20.8,
+                19.8,
+                20.3,
+                21.4,
+                22.7,
+                22.0,
+                23.9,
+                24.6,
+                25.0,
+                24.3,
+                25.1,
+                25.6,
+                27.7,
+                27.0,
+                27.9,
+                28.3,
+                27.6,
+                26.8,
+                27.0,
+                27.1,
+                27.5,
+                26.8,
+                26.4,
+                26.5,
+                26.7,
+                25.8,
+                25.8,
+                27.8,
+                30.1,
+                29.4,
+                28.6,
+                28.1,
+                28.1,
+                29.0,
+                31.0,
+                33.0,
+                33.9,
+                33.1,
+                33.2,
+                33.3,
+                32.9,
+                32.3,
+                32.1,
+                32.0,
+                31.6,
+                31.5,
+                31.4,
+                32.2,
+                32.3,
+                32.7,
+                33.8,
+                35.0,
+                35.8,
+                36.0,
+                36.8,
+                38.0,
+                38.8,
+                36.3,
+                34.4,
+                36.4,
+                36.9,
+                35.2,
+                36.8,
+                37.2,
+                36.6,
+                34.9,
+                35.4,
+                36.1,
+                36.0,
+                35.3,
+                35.0,
+                36.4,
+                36.3,
+                37.0,
+                37.8,
+                38.6,
+                38.6,
+                40.8,
+                42.7,
+                45.1,
+                45.9,
+                44.7,
+                45.0,
+                45.9,
+                46.8,
+                47.3,
+                49.6,
+                49.8,
+                50.4,
+                51.5
+            ],
+            "realtimeSort": false,
+            "showBackground": false,
+            "stackStrategy": "samesign",
+            "cursor": "pointer",
+            "barMinHeight": 0,
+            "barCategoryGap": "20%",
+            "barGap": "30%",
+            "large": false,
+            "largeThreshold": 400,
+            "seriesLayoutBy": "column",
+            "datasetIndex": 0,
+            "clip": true,
+            "zlevel": 0,
+            "z": 2,
+            "label": {
+                "show": true,
+                "margin": 8
+            }
+        }
+    ],
+    "legend": [
+        {
+            "data": [
+                "\u4e2d\u592e\u653f\u5e9c",
+                "\u5730\u65b9\u653f\u5e9c"
+            ],
+            "selected": {},
+            "show": true,
+            "left": "2%",
+            "top": "15%",
+            "orient": "vertical",
+            "padding": 5,
+            "itemGap": 10,
+            "itemWidth": 25,
+            "itemHeight": 14,
+            "backgroundColor": "transparent",
+            "borderColor": "#ccc",
+            "borderWidth": 1,
+            "borderRadius": 0,
+            "pageButtonItemGap": 5,
+            "pageButtonPosition": "end",
+            "pageFormatter": "{current}/{total}",
+            "pageIconColor": "#2f4554",
+            "pageIconInactiveColor": "#aaa",
+            "pageIconSize": 15,
+            "animationDurationUpdate": 800,
+            "selector": false,
+            "selectorPosition": "auto",
+            "selectorItemGap": 7,
+            "selectorButtonGap": 10
+        }
+    ],
+    "tooltip": {
+        "show": true,
+        "trigger": "item",
+        "triggerOn": "mousemove|click",
+        "axisPointer": {
+            "type": "line"
+        },
+        "showContent": true,
+        "alwaysShowContent": false,
+        "showDelay": 0,
+        "hideDelay": 100,
+        "enterable": false,
+        "confine": false,
+        "appendToBody": false,
+        "transitionDuration": 0.4,
+        "textStyle": {
+            "fontSize": 14
+        },
+        "borderWidth": 0,
+        "padding": 5,
+        "order": "seriesAsc"
+    },
+    "xAxis": [
+        {
+            "name": "\u5e74\u4efd",
+            "show": true,
+            "scale": false,
+            "nameLocation": "end",
+            "nameGap": 15,
+            "gridIndex": 0,
+            "inverse": false,
+            "offset": 0,
+            "splitNumber": 5,
+            "minInterval": 0,
+            "splitLine": {
+                "show": true,
+                "lineStyle": {
+                    "show": true,
+                    "width": 1,
+                    "opacity": 1,
+                    "curveness": 0,
+                    "type": "solid"
+                }
+            },
+            "data": [
+                "0",
+                "1",
+                "2",
+                "3",
+                "4",
+                "5",
+                "6",
+                "7",
+                "8",
+                "9",
+                "10",
+                "11",
+                "12",
+                "13",
+                "14",
+                "15",
+                "16",
+                "17",
+                "18",
+                "19",
+                "20",
+                "21",
+                "22",
+                "23",
+                "24",
+                "25",
+                "26",
+                "27",
+                "28",
+                "29",
+                "30",
+                "31",
+                "32",
+                "33",
+                "34",
+                "35",
+                "36",
+                "37",
+                "38",
+                "39",
+                "40",
+                "41",
+                "42",
+                "43",
+                "44",
+                "45",
+                "46",
+                "47",
+                "48",
+                "49",
+                "50",
+                "51",
+                "52",
+                "53",
+                "54",
+                "55",
+                "56",
+                "57",
+                "58",
+                "59",
+                "60",
+                "61",
+                "62",
+                "63",
+                "64",
+                "65",
+                "66",
+                "67",
+                "68",
+                "69",
+                "70",
+                "71",
+                "72",
+                "73",
+                "74",
+                "75",
+                "76",
+                "77",
+                "78",
+                "79",
+                "80",
+                "81",
+                "82",
+                "83",
+                "84",
+                "85",
+                "86",
+                "87",
+                "88",
+                "89",
+                "90",
+                "91",
+                "92",
+                "93",
+                "94",
+                "95",
+                "96",
+                "97",
+                "98",
+                "99",
+                "100",
+                "101",
+                "102",
+                "103",
+                "104",
+                "105",
+                "106",
+                "107",
+                "108",
+                "109",
+                "110",
+                "111",
+                "112",
+                "113",
+                "114",
+                "115",
+                "116",
+                "117",
+                "118",
+                "119",
+                "120",
+                "121"
+            ]
+        }
+    ],
+    "yAxis": [
+        {
+            "name": "\u4ebf\u5143",
+            "show": true,
+            "scale": false,
+            "nameLocation": "end",
+            "nameGap": 15,
+            "gridIndex": 0,
+            "inverse": false,
+            "offset": 0,
+            "splitNumber": 5,
+            "minInterval": 0,
+            "splitLine": {
+                "show": true,
+                "lineStyle": {
+                    "show": true,
+                    "width": 1,
+                    "opacity": 1,
+                    "curveness": 0,
+                    "type": "solid"
+                }
+            }
+        }
+    ],
+    "title": [
+        {
+            "show": true,
+            "text": "\u4e2d\u592e\u653f\u5e9c\u548c\u5730\u65b9\u653f\u5e9c\u8d44\u4ea7\u8d1f\u503a\u60c5\u51b5",
+            "target": "blank",
+            "subtarget": "blank",
+            "padding": 5,
+            "itemGap": 10,
+            "textAlign": "auto",
+            "textVerticalAlign": "auto",
+            "triggerEvent": false
+        }
+    ]
+}
+, error: Extra data: line 158 column 1 (char 4363)
+2023-07-16 17:26:27 [INFO] 
+            Code running:
+            ```
+            import pandas as pd
+from pyecharts import options as opts
+from pyecharts.charts import Line
+df = df
+df['年份'] = pd.to_datetime(df['年份'])
+line = Line()
+line.add_xaxis(df['年份'].dt.strftime('%Y-%m'))
+line.add_yaxis('居民部门', df['居民部门'], label_opts=opts.LabelOpts(formatter=
+    '{value}亿元'))
+line.add_yaxis('非金融企业部门', df['非金融企业部门'], label_opts=opts.LabelOpts(
+    formatter='{value}亿元'))
+line.add_yaxis('政府部门', df['政府部门'], label_opts=opts.LabelOpts(formatter=
+    '{value}亿元'))
+line.add_yaxis('中央政府', df['中央政府'], label_opts=opts.LabelOpts(formatter=
+    '{value}亿元'))
+line.add_yaxis('地方政府', df['地方政府'], label_opts=opts.LabelOpts(formatter=
+    '{value}亿元'))
+line.add_yaxis('实体经济部门', df['实体经济部门'], label_opts=opts.LabelOpts(formatter=
+    '{value}亿元'))
+line.add_yaxis('金融部门资产方', df['金融部门资产方'], label_opts=opts.LabelOpts(
+    formatter='{value}亿元'))
+line.add_yaxis('金融部门负债方', df['金融部门负债方'], label_opts=opts.LabelOpts(
+    formatter='{value}亿元'))
+line.set_global_opts(title_opts=opts.TitleOpts(title='各部门资产和负债随时间变化趋势',
+    pos_left='center'), yaxis_opts=opts.AxisOpts(name='亿元'))
+echarts_json = line.dump_options_with_quotes()
+print(echarts_json)
+            ```
+2023-07-16 17:27:20 [INFO] 图表描述：该图表展示了不同部门的资产和负债随时间变化的趋势。可以看出，非金融企业部门的资产总额最高，其次是实体经济部门。政府部门和金融部门的资产总额相对较低，但也呈现出增长的趋势。居民部门的资产总额最低，且在1994年之后出现了急剧的下降。在负债方面，金融部门负债总额最高，其次是地方政府和非金融企业部门。实体经济部门和政府部门的负债总额相对较低，但也呈现出增长的趋势。总体来看，各部门的资产和负债总额都呈现出增长的趋势，但增长速度存在差异。
+2023-07-16 17:27:32 [INFO] 
+            Code running:
+            ```
+            import pandas as pd
+from pyecharts import options as opts
+from pyecharts.charts import Bar
+df = df
+df['年份'] = pd.to_datetime(df['年份'])
+df.set_index('年份', inplace=True)
+bar = Bar().add_xaxis(df.index.strftime('%Y-%m').tolist()).add_yaxis('居民部门',
+    df['居民部门'].tolist(), stack='总量').add_yaxis('非金融企业部门', df['非金融企业部门'].
+    tolist(), stack='总量').add_yaxis('政府部门', df['政府部门'].tolist(), stack='总量'
+    ).add_yaxis('实体经济部门', df['实体经济部门'].tolist(), stack='总量').add_yaxis('中央政府',
+    df['中央政府'].tolist(), stack='总量').add_yaxis('地方政府', df['地方政府'].tolist(),
+    stack='总量').add_yaxis('金融部门资产方', df['金融部门资产方'].tolist(), stack='总量'
+    ).add_yaxis('金融部门负债方', df['金融部门负债方'].tolist(), stack='总量').set_series_opts(
+    label_opts=opts.LabelOpts(is_show=False)).set_global_opts(title_opts=
+    opts.TitleOpts(title='各部门资产和负债的总量随时间的变化趋势', pos_left='center'),
+    yaxis_opts=opts.AxisOpts(name='亿人民币'), xaxis_opts=opts.AxisOpts(name='时间'))
+print(bar.dump_options())
+            ```
+2023-07-16 17:29:53 [INFO] 图表描述：<startDescription>
+该图表展示了各部门资产和负债的总量随时间的变化趋势。图中包含了六个部门的数据，分别是居民部门、非金融企业部门、政府部门、实体经济部门、中央政府和地方政府，以及金融部门的资产和负债数据。X轴表示时间，Y轴表示亿人民币。
+
+从图表中可以看出，非金融企业部门的总资产总量一直处于较高的水平，而政府部门的资产总量也在逐年增长。实体经济部门的资产总量也呈现出逐年增长的趋势，但增长速度较为缓慢。金融部门的资产和负债总量都在逐年增长，其中资产总量高于负债总量。
+
+另外，从图表中还可以看到，地方政府在2015年之前的资产总量一直较低，但之后快速增长，到2019年已经超过了中央政府的资产总量。而居民部门的资产总量一直维持在较低的水平，变化不大。
+
+综上所述，该图表表明了各部门资产和负债的总量随时间的变化趋势，以及各部门之间的资产总量差异和变化趋势。
+2023-07-16 17:30:11 [INFO] 
+            Code running:
+            ```
+            import pandas as pd
+from pyecharts.charts import Pie
+from pyecharts import options as opts
+df = df
+assets_sum = df.iloc[:, 1:].sum(axis=1)
+liabilities_sum = df.iloc[:, 7:].sum(axis=1)
+assets_ratio = assets_sum / (assets_sum + liabilities_sum)
+liabilities_ratio = liabilities_sum / (assets_sum + liabilities_sum)
+pie = Pie(init_opts=opts.InitOpts(width='1000px', height='600px'))
+pie.add(series_name='资产占比', data_pair=[(df.columns[i + 1], assets_ratio[i]) for
+    i in range(len(df))], radius=['30%', '50%'], center=['25%', '50%'],
+    label_opts=opts.LabelOpts(formatter='{b}: {d}%'))
+pie.add(series_name='负债占比', data_pair=[(df.columns[i + 7],
+    liabilities_ratio[i]) for i in range(len(df))], radius=['30%', '50%'],
+    center=['75%', '50%'], label_opts=opts.LabelOpts(formatter='{b}: {d}%'))
+pie.set_global_opts(title_opts=opts.TitleOpts(title='各部门资产和负债占比', pos_left=
+    'center'), legend_opts=opts.LegendOpts(orient='vertical', pos_top=
+    'middle', pos_left='80%'))
+pie.set_series_opts(tooltip_opts=opts.TooltipOpts(trigger='item', formatter
+    ='{a} <br/>{b}: {d}%'))
+pie.set_colors(['#5793f3', '#d14a61', '#675bba', '#b1cfa5', '#e3c7a2',
+    '#c6ccd3', '#94a9bd', '#d3bfb0', '#b6a2de'])
+echarts_json = pie.dump_options()
+            ```
+2023-07-16 17:31:53 [INFO] 
+            Code running:
+            ```
+            import pandas as pd
+from pyecharts import options as opts
+from pyecharts.charts import Scatter
+df = df
+scatter = Scatter().add_xaxis(df['金融部门资产方']).add_yaxis(series_name=
+    '金融部门负债方', y_axis=df['金融部门负债方'], symbol_size=10, label_opts=opts.
+    LabelOpts(formatter='{c}')).set_global_opts(title_opts=opts.TitleOpts(
+    title='各部门资产和负债之间的关系', pos_left='center'), xaxis_opts=opts.AxisOpts(
+    name='金融部门资产方（单位：亿）'), yaxis_opts=opts.AxisOpts(name='金融部门负债方（单位：亿）')
+    ).render('scatter.html')
+with open('scatter.html', encoding='utf8', mode='r') as f:
+    echarts_json = f.read()
+print(echarts_json)
+            ```
+2023-07-16 17:32:13 [INFO] Unable to parse the output: <!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Awesome-pyecharts</title>
+                <script type="text/javascript" src="https://assets.pyecharts.org/assets/v5/echarts.min.js"></script>
+
+</head>
+<body >
+    <div id="30e54b400f044ff0a66d2781c59d3a10" class="chart-container" style="width:900px; height:500px; "></div>
+    <script>
+        var chart_30e54b400f044ff0a66d2781c59d3a10 = echarts.init(
+            document.getElementById('30e54b400f044ff0a66d2781c59d3a10'), 'white', {renderer: 'canvas'});
+        var option_30e54b400f044ff0a66d2781c59d3a10 = {
+    "animation": true,
+    "animationThreshold": 2000,
+    "animationDuration": 1000,
+    "animationEasing": "cubicOut",
+    "animationDelay": 0,
+    "animationDurationUpdate": 300,
+    "animationEasingUpdate": "cubicOut",
+    "animationDelayUpdate": 0,
+    "aria": {
+        "enabled": false
+    },
+    "color": [
+        "#5470c6",
+        "#91cc75",
+        "#fac858",
+        "#ee6666",
+        "#73c0de",
+        "#3ba272",
+        "#fc8452",
+        "#9a60b4",
+        "#ea7ccc"
+    ],
+    "series": [
+        {
+            "type": "scatter",
+            "name": "\u91d1\u878d\u90e8\u95e8\u8d1f\u503a\u65b9",
+            "symbolSize": 10,
+            "data": [
+                [
+                    7.8,
+                    7.2
+                ],
+                [
+                    7.8,
+                    7.3
+                ],
+                [
+                    7.7,
+                    7.3
+                ],
+                [
+                    7.7,
+                    7.3
+                ],
+                [
+                    8.9,
+                    7.1
+                ],
+                [
+                    8.8,
+                    7.1
+                ],
+                [
+                    8.6,
+                    7.0
+                ],
+                [
+                    8.4,
+                    6.9
+                ],
+                [
+                    9.8,
+                    6.8
+                ],
+                [
+                    9.8,
+                    6.9
+                ],
+                [
+                    9.8,
+                    6.9
+                ],
+                [
+                    9.8,
+                    7.0
+                ],
+                [
+                    10.0,
+                    7.0
+                ],
+                [
+                    10.2,
+                    7.2
+                ],
+                [
+                    10.4,
+                    7.4
+                ],
+                [
+                    10.6,
+                    7.6
+                ],
+                [
+                    10.8,
+                    7.8
+                ],
+                [
+                    11.5,
+                    8.1
+                ],
+                [
+                    12.2,
+                    8.4
+                ],
+                [
+                    13.1,
+                    8.8
+                ],
+                [
+                    14.2,
+                    9.1
+                ],
+                [
+                    15.3,
+                    9.9
+                ],
+                [
+                    16.4,
+                    10.7
+                ],
+                [
+                    17.7,
+                    11.6
+                ],
+                [
+                    19.0,
+                    12.5
+                ],
+                [
+                    19.7,
+                    12.8
+                ],
+                [
+                    20.4,
+                    13.2
+                ],
+                [
+                    21.2,
+                    13.6
+                ],
+                [
+                    22.0,
+                    16.0
+                ],
+                [
+                    22.5,
+                    16.1
+                ],
+                [
+                    22.9,
+                    16.2
+                ],
+                [
+                    23.3,
+                    16.3
+                ],
+                [
+                    23.7,
+                    16.3
+                ],
+                [
+                    23.8,
+                    16.6
+                ],
+                [
+                    24.0,
+                    16.8
+                ],
+                [
+                    24.2,
+                    17.1
+                ],
+                [
+                    24.4,
+                    17.5
+                ],
+                [
+                    25.0,
+                    18.6
+                ],
+                [
+                    25.5,
+                    19.8
+                ],
+                [
+                    25.9,
+                    21.4
+                ],
+                [
+                    26.3,
+                    23.2
+                ],
+                [
+                    26.7,
+                    23.3
+                ],
+                [
+                    27.2,
+                    23.4
+                ],
+                [
+                    27.6,
+                    23.5
+                ],
+                [
+                    28.0,
+                    23.4
+                ],
+                [
+                    26.9,
+                    23.5
+                ],
+                [
+                    25.8,
+                    23.4
+                ],
+                [
+                    24.9,
+                    23.3
+                ],
+                [
+                    24.2,
+                    23.2
+                ],
+                [
+                    21.2,
+                    21.4
+                ],
+                [
+                    23.4,
+                    22.7
+                ],
+                [
+                    24.3,
+                    24.0
+                ],
+                [
+                    24.5,
+                    24.2
+                ],
+                [
+                    25.2,
+                    25.0
+                ],
+                [
+                    25.5,
+                    26.7
+                ],
+                [
+                    24.9,
+                    26.7
+                ],
+                [
+                    24.4,
+                    27.2
+                ],
+                [
+                    24.6,
+                    29.5
+                ],
+                [
+                    26.2,
+                    33.6
+                ],
+                [
+                    27.0,
+                    34.7
+                ],
+                [
+                    25.6,
+                    34.0
+                ],
+                [
+                    27.0,
+                    35.9
+                ],
+                [
+                    27.3,
+                    35.2
+                ],
+                [
+                    27.1,
+                    32.5
+                ],
+                [
+                    27.6,
+                    33.5
+                ],
+                [
+                    30.2,
+                    38.6
+                ],
+                [
+                    31.8,
+                    40.4
+                ],
+                [
+                    30.0,
+                    39.6
+                ],
+                [
+                    33.0,
+                    39.6
+                ],
+                [
+                    37.7,
+                    41.6
+                ],
+                [
+                    37.8,
+                    39.9
+                ],
+                [
+                    38.5,
+                    39.0
+                ],
+                [
+                    37.4,
+                    38.6
+                ],
+                [
+                    42.0,
+                    39.1
+                ],
+                [
+                    43.7,
+                    39.9
+                ],
+                [
+                    40.6,
+                    38.9
+                ],
+                [
+                    43.8,
+                    43.6
+                ],
+                [
+                    49.9,
+                    48.0
+                ],
+                [
+                    53.9,
+                    49.5
+                ],
+                [
+                    51.0,
+                    46.8
+                ],
+                [
+                    53.4,
+                    49.0
+                ],
+                [
+                    58.2,
+                    49.4
+                ],
+                [
+                    57.2,
+                    48.3
+                ],
+                [
+                    55.6,
+                    47.4
+                ],
+                [
+                    56.2,
+                    48.7
+                ],
+                [
+                    60.2,
+                    50.8
+                ],
+                [
+                    64.2,
+                    52.8
+                ],
+                [
+                    59.8,
+                    52.2
+                ],
+                [
+                    60.9,
+                    53.9
+                ],
+                [
+                    62.5,
+                    55.1
+                ],
+                [
+                    68.4,
+                    61.9
+                ],
+                [
+                    68.2,
+                    61.8
+                ],
+                [
+                    71.2,
+                    64.9
+                ],
+                [
+                    74.9,
+                    63.9
+                ],
+                [
+                    76.7,
+                    66.5
+                ],
+                [
+                    76.4,
+                    65.9
+                ],
+                [
+                    77.9,
+                    67.4
+                ],
+                [
+                    77.0,
+                    65.4
+                ],
+                [
+                    73.9,
+                    64.0
+                ],
+                [
+                    70.7,
+                    63.0
+                ],
+                [
+                    69.3,
+                    62.5
+                ],
+                [
+                    66.3,
+                    61.2
+                ],
+                [
+                    63.6,
+                    60.9
+                ],
+                [
+                    60.2,
+                    59.5
+                ],
+                [
+                    59.4,
+                    59.7
+                ],
+                [
+                    59.3,
+                    58.2
+                ],
+                [
+                    57.6,
+                    57.6
+                ],
+                [
+                    54.8,
+                    58.3
+                ],
+                [
+                    55.1,
+                    60.2
+                ],
+                [
+                    57.9,
+                    61.2
+                ],
+                [
+                    57.5,
+                    60.9
+                ],
+                [
+                    55.9,
+                    62.5
+                ],
+                [
+                    54.4,
+                    62.9
+                ],
+                [
+                    53.0,
+                    62.5
+                ],
+                [
+                    51.5,
+                    61.9
+                ],
+                [
+                    49.4,
+                    62.2
+                ],
+                [
+                    48.6,
+                    62.4
+                ],
+                [
+                    49.2,
+                    62.6
+                ],
+                [
+                    50.0,
+                    63.9
+                ],
+                [
+                    49.3,
+                    63.9
+                ],
+                [
+                    50.0,
+                    64.4
+                ],
+                [
+                    52.7,
+                    65.6
+                ]
+            ],
+            "label": {
+                "show": true,
+                "margin": 8,
+                "formatter": "{c}"
+            }
+        }
+    ],
+    "legend": [
+        {
+            "data": [
+                "\u91d1\u878d\u90e8\u95e8\u8d1f\u503a\u65b9"
+            ],
+            "selected": {},
+            "show": true,
+            "padding": 5,
+            "itemGap": 10,
+            "itemWidth": 25,
+            "itemHeight": 14,
+            "backgroundColor": "transparent",
+            "borderColor": "#ccc",
+            "borderWidth": 1,
+            "borderRadius": 0,
+            "pageButtonItemGap": 5,
+            "pageButtonPosition": "end",
+            "pageFormatter": "{current}/{total}",
+            "pageIconColor": "#2f4554",
+            "pageIconInactiveColor": "#aaa",
+            "pageIconSize": 15,
+            "animationDurationUpdate": 800,
+            "selector": false,
+            "selectorPosition": "auto",
+            "selectorItemGap": 7,
+            "selectorButtonGap": 10
+        }
+    ],
+    "tooltip": {
+        "show": true,
+        "trigger": "item",
+        "triggerOn": "mousemove|click",
+        "axisPointer": {
+            "type": "line"
+        },
+        "showContent": true,
+        "alwaysShowContent": false,
+        "showDelay": 0,
+        "hideDelay": 100,
+        "enterable": false,
+        "confine": false,
+        "appendToBody": false,
+        "transitionDuration": 0.4,
+        "textStyle": {
+            "fontSize": 14
+        },
+        "borderWidth": 0,
+        "padding": 5,
+        "order": "seriesAsc"
+    },
+    "xAxis": [
+        {
+            "name": "\u91d1\u878d\u90e8\u95e8\u8d44\u4ea7\u65b9\uff08\u5355\u4f4d\uff1a\u4ebf\uff09",
+            "show": true,
+            "scale": false,
+            "nameLocation": "end",
+            "nameGap": 15,
+            "gridIndex": 0,
+            "inverse": false,
+            "offset": 0,
+            "splitNumber": 5,
+            "minInterval": 0,
+            "splitLine": {
+                "show": true,
+                "lineStyle": {
+                    "show": true,
+                    "width": 1,
+                    "opacity": 1,
+                    "curveness": 0,
+                    "type": "solid"
+                }
+            },
+            "data": null
+        }
+    ],
+    "yAxis": [
+        {
+            "name": "\u91d1\u878d\u90e8\u95e8\u8d1f\u503a\u65b9\uff08\u5355\u4f4d\uff1a\u4ebf\uff09",
+            "show": true,
+            "scale": false,
+            "nameLocation": "end",
+            "nameGap": 15,
+            "gridIndex": 0,
+            "inverse": false,
+            "offset": 0,
+            "splitNumber": 5,
+            "minInterval": 0,
+            "splitLine": {
+                "show": true,
+                "lineStyle": {
+                    "show": true,
+                    "width": 1,
+                    "opacity": 1,
+                    "curveness": 0,
+                    "type": "solid"
+                }
+            }
+        }
+    ],
+    "title": [
+        {
+            "show": true,
+            "text": "\u5404\u90e8\u95e8\u8d44\u4ea7\u548c\u8d1f\u503a\u4e4b\u95f4\u7684\u5173\u7cfb",
+            "target": "blank",
+            "subtarget": "blank",
+            "left": "center",
+            "padding": 5,
+            "itemGap": 10,
+            "textAlign": "auto",
+            "textVerticalAlign": "auto",
+            "triggerEvent": false
+        }
+    ]
+};
+        chart_30e54b400f044ff0a66d2781c59d3a10.setOption(option_30e54b400f044ff0a66d2781c59d3a10);
+    </script>
+</body>
+</html>
+
+, error: Expecting value: line 1 column 1 (char 0)
+2023-07-16 17:33:20 [INFO] 图表描述：这份图表数据展示了金融部门资产和负债之间的关系。从图表中可以看出，随着金融部门资产方的增加，金融部门负债方也呈现出逐渐增加的趋势。同时，可以发现这份数据中金融部门负债方和资产方之间存在着一定的正相关关系。具体来说，两者之间的相关系数为0.98，说明两者之间的变化趋势高度一致。
+
+在这份数据中，金融部门负债方和资产方的均值分别为34.89亿和36.21亿，且标准差较大，分别为20.99亿和20.48亿，说明金融部门负债方和资产方之间的差异较大。此外，这份数据中的最大值和最小值分别为77.9亿和6.8亿，说明金融部门负债方和资产方之间的差距非常大。
+
+综上所述，这份图表数据表明了金融部门资产和负债之间存在着一定的正相关关系，且差异较大，需要在管理上加以注意和控制。
+2023-07-16 17:33:33 [INFO] 
+            Code running:
+            ```
+            import pandas as pd
+from pyecharts.charts import Bar
+from pyecharts import options as opts
+from pyecharts.commons.utils import JsCode
+df = df
+df['年份'] = pd.to_datetime(df['年份'])
+bar = Bar().add_xaxis(df['年份'].dt.strftime('%Y').tolist()).add_yaxis('中央政府资产',
+    df['中央政府'], stack='资产').add_yaxis('地方政府资产', df['地方政府'], stack='资产'
+    ).add_yaxis('中央政府负债', [(-i) for i in df['中央政府']], stack='负债').add_yaxis(
+    '地方政府负债', [(-i) for i in df['地方政府']], stack='负债').set_series_opts(
+    label_opts=opts.LabelOpts(position='inside', formatter=JsCode(
+    """function(params) {
+                    if (params.value < 0) {
+                        return -params.value;
+                    } else {
+                        return '';
+                    }
+                }"""
+    ))).set_global_opts(title_opts=opts.TitleOpts(title=
+    '中央政府和地方政府资产和负债变化趋势', pos_left='center'), yaxis_opts=opts.AxisOpts(name
+    ='亿元', axislabel_opts=opts.LabelOpts(formatter='{value}'),
+    splitline_opts=opts.SplitLineOpts(is_show=True)), xaxis_opts=opts.
+    AxisOpts(axislabel_opts=opts.LabelOpts(rotate=45, font_size=10)),
+    tooltip_opts=opts.TooltipOpts(trigger='axis', axis_pointer_type='shadow'))
+echarts_json = bar.dump_options_with_quotes()
+print(echarts_json)
+            ```
+2023-07-16 17:36:08 [INFO] 
+            Code running:
+            ```
+            import pandas as pd
+from pyecharts.charts import Pie
+from pyecharts import options as opts
+df = df
+df['政府部门总量'] = df['政府部门'] + df['中央政府'] + df['地方政府']
+central_assets_ratio = round(df['中央政府'].sum() / df['政府部门总量'].sum() * 100, 2)
+central_debts_ratio = round(df['金融部门负债方'].sum() / df['政府部门总量'].sum() * 100, 2)
+local_assets_ratio = round(df['地方政府'].sum() / df['政府部门总量'].sum() * 100, 2)
+local_debts_ratio = round(df['金融部门负债方'].sum() / df['政府部门总量'].sum() * 100, 2)
+pie = Pie()
+pie.add('', [('', central_assets_ratio), ('', local_assets_ratio)], radius=
+    ['30%', '50%'], center=['25%', '50%'], label_opts=opts.LabelOpts(
+    position='center', formatter='{b}\n{d}%'), itemstyle_opts=opts.
+    ItemStyleOpts(border_width=2, border_color='#fff'))
+pie.add('', [('', central_debts_ratio), ('', local_debts_ratio)], radius=[
+    '30%', '50%'], center=['75%', '50%'], label_opts=opts.LabelOpts(
+    position='center', formatter='{b}\n{d}%'), itemstyle_opts=opts.
+    ItemStyleOpts(border_width=2, border_color='#fff'))
+pie.set_global_opts(title_opts=opts.TitleOpts(title=
+    '中央政府和地方政府的资产和负债占政府部门总量的比例', pos_left='center'), legend_opts=opts.
+    LegendOpts(is_show=False))
+pie.set_series_opts(tooltip_opts=opts.TooltipOpts(formatter='{b} : {d}%'))
+echarts_json = pie.dump_options_with_quotes()
+print(echarts_json)
+            ```

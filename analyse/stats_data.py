@@ -96,7 +96,19 @@ class StatsData:
         return action
 
     def _get_stats_data_from_pie_chart(self, json_result):
-        pass
+        title = json_result.get("title", [{}])[0].get("text", "")
+        series = json_result.get("series", [])
+        charts_type = series[0].get("type", "")
+        name_data_mapping = {each_series.get("name", ""): each_series.get("data", []) for each_series in series}
+        describe_df = {k: pd.DataFrame(v).describe() for k, v in name_data_mapping.items()}
+        name_data_mapping = {k: v[:DATA_DETAIL_LIMIT] for k, v in name_data_mapping.items()}
+        action = {
+            "charts_type": charts_type,  # "bar", "line", "pie" .etc
+            "title": title,
+            "name_data_mapping": name_data_mapping,
+            "describe_df": describe_df  # {"name": pd.DataFrame}
+        }
+        return action
 
     def _get_stats_data_from_boxplot_chart(self, json_result):
         pass

@@ -81,6 +81,15 @@ class AIAnalyse:
         with open(REPORT_NAME, "w") as f:
             f.write(json.dumps(self.reports, indent=2, ensure_ascii=False))
 
+    def describe_df(self, data_frame: pd.DataFrame):
+        for col in data_frame.columns:
+            if col in ["level_0", "index"]:
+                continue
+            if data_frame[col].dtype in [int, float]:
+                col_describe = data_frame[col].describe()
+
+
+
     def __call__(self,
                  data_frame: pd.DataFrame,
                  save_charts: Optional[bool] = True,
@@ -199,7 +208,12 @@ class AIAnalyse:
                 utils.log(f"Unable to parse the output: {captured_output}, error: {err}")
                 values = re.findall(r"=.(\{[\s\S]*?);", captured_output)
                 captured_output = values[0] if values else ""
-            return captured_output
+            finally:
+                if not captured_output:
+                    values = re.findall("({[\s\S]*})\n{", captured_output)
+                    captured_output = values[0] if values else ""
+                if captured_output:
+                    return captured_output
         # Evaluate the last line and return its value or the captured output
         lines = code.strip().split("\n")
         last_line = lines[-1].strip()
