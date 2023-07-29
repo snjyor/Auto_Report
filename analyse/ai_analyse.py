@@ -2,7 +2,8 @@ import json
 import ast
 import io
 import re
-import sys, os
+import sys
+import os
 from contextlib import redirect_stdout
 from typing import Optional
 import astor
@@ -27,12 +28,13 @@ class AIAnalyse:
         self.global_params = {}
         self.reports = []
 
-    def run(self,
-            data_frame: pd.DataFrame,
-            save_charts: bool = True,
-            show_code: Optional[bool] = True,
-            charts_description: Optional[bool] = True
-            ):
+    def run(
+        self,
+        data_frame: pd.DataFrame,
+        save_charts: bool = True,
+        show_code: Optional[bool] = True,
+        charts_description: Optional[bool] = True,
+    ):
         df_head = data_frame.head()
         num_rows, num_columns = data_frame.shape
         self.prompts = Prompts(num_rows=num_rows, num_cols=num_columns, df_head=df_head)
@@ -45,7 +47,9 @@ class AIAnalyse:
                 print(f"根据以下数据可视化建议进行绘图：{each_suggestion}", end="\n")
                 print("代码生成中...")
                 item = {"suggestion": each_suggestion}
-                code_prompt = self.prompts.generate_python_code_prompt_by_suggestion(each_suggestion)
+                code_prompt = self.prompts.generate_python_code_prompt_by_suggestion(
+                    each_suggestion
+                )
                 code = self.generate_code(code_prompt)
                 self.global_params["suggestion"] = each_suggestion
                 self.global_params.update({"suggestion": each_suggestion, "code": code})
@@ -60,7 +64,9 @@ class AIAnalyse:
                     stats_data = get_stats_data(json_str_result)
                     stats_data = stats_data if stats_data else {}
                     item.update({"title": stats_data.get("title", "")})
-                    description_prompt = self.prompts.generate_charts_description_prompt(**stats_data)
+                    description_prompt = (
+                        self.prompts.generate_charts_description_prompt(**stats_data)
+                    )
                     description_response = utils.gpt(description_prompt)
                     print(f"图表描述：{description_response}")
                     descriptions = self._get_description(description_response)
@@ -73,7 +79,9 @@ class AIAnalyse:
                 self.reports.append(item)
                 yield json_str_result, descriptions
             except Exception as e:
-                print(f"Unable to run code for suggestion: {each_suggestion}, error: {e}")
+                print(
+                    f"Unable to run code for suggestion: {each_suggestion}, error: {e}"
+                )
                 continue
         self._save_report()
 
@@ -88,19 +96,18 @@ class AIAnalyse:
             if data_frame[col].dtype in [int, float]:
                 col_describe = data_frame[col].describe()
 
-
-
-    def __call__(self,
-                 data_frame: pd.DataFrame,
-                 save_charts: Optional[bool] = True,
-                 show_code: Optional[bool] = True,
-                 charts_description: Optional[bool] = True
-                 ):
+    def __call__(
+        self,
+        data_frame: pd.DataFrame,
+        save_charts: Optional[bool] = True,
+        show_code: Optional[bool] = True,
+        charts_description: Optional[bool] = True,
+    ):
         return self.run(
             data_frame=data_frame,
             save_charts=save_charts,
             show_code=show_code,
-            charts_description=charts_description
+            charts_description=charts_description,
         )
 
     def generate_code(self, prompt: str):
@@ -121,8 +128,12 @@ class AIAnalyse:
 
         new_body = []
         for node in tree.body:
-            if isinstance(node, ast.Assign) and isinstance(node.targets[0], ast.Name) and node.targets[0].id == 'df':
-                node.value = ast.Name(id='df', ctx=ast.Load())
+            if (
+                isinstance(node, ast.Assign)
+                and isinstance(node.targets[0], ast.Name)
+                and node.targets[0].id == "df"
+            ):
+                node.value = ast.Name(id="df", ctx=ast.Load())
                 node.value.ctx = ast.Load()
             new_body.append(node)
 
@@ -134,7 +145,12 @@ class AIAnalyse:
             utils.log("Please provide a valid json string")
             return
         json_data = json.loads(json_str)
-        file_name = json_data.get("title", [{}])[0].get("text", utils.md5(json_str)).replace("/", "_").replace("\\", "_")
+        file_name = (
+            json_data.get("title", [{}])[0]
+            .get("text", utils.md5(json_str))
+            .replace("/", "_")
+            .replace("\\", "_")
+        )
         if folder_name:
             if not os.path.exists(folder_name):
                 os.mkdir(folder_name)
@@ -142,11 +158,18 @@ class AIAnalyse:
         else:
             if not os.path.exists(CHARTS_EXPORT_PATH):
                 os.mkdir(CHARTS_EXPORT_PATH)
-            export_path = os.path.join(ABS_PATH, f"{CHARTS_EXPORT_PATH}/{file_name}.json")
+            export_path = os.path.join(
+                ABS_PATH, f"{CHARTS_EXPORT_PATH}/{file_name}.json"
+            )
         with open(export_path, "w") as f:
             f.write(json.dumps(json_data, indent=2, ensure_ascii=False))
 
-    def run_code(self, code: str, data_frame: pd.DataFrame, use_error_correction_framework: bool = False) -> str:
+    def run_code(
+        self,
+        code: str,
+        data_frame: pd.DataFrame,
+        use_error_correction_framework: bool = False,
+    ) -> str:
         """
         A method to execute the python code generated by LLMs to answer the question about the
         input dataframe. Run the code in the current context and return the result.
@@ -174,13 +197,14 @@ class AIAnalyse:
             data_frame.drop(columns=["level_0"], inplace=True)
         if "index" in data_frame.columns:
             data_frame.drop(columns=["index"], inplace=True)
-        environment = {name: getattr(__builtins__, name) for name in dir(__builtins__) if not name.startswith("_")}
-        environment.update({
-            "pd": pd,
-            "json": json,
-            "pyecharts": pyecharts,
-            "df": data_frame
-        })
+        environment = {
+            name: getattr(__builtins__, name)
+            for name in dir(__builtins__)
+            if not name.startswith("_")
+        }
+        environment.update(
+            {"pd": pd, "json": json, "pyecharts": pyecharts, "df": data_frame}
+        )
 
         # Redirect standard output to a StringIO buffer
         with redirect_stdout(io.StringIO()) as output:
@@ -196,7 +220,10 @@ class AIAnalyse:
 
                     count += 1
                     fix_error_prompt = self.prompts.generate_correct_error_prompt(
-                        suggestion=self.global_params["suggestion"], error_returned=err, code=code)
+                        suggestion=self.global_params["suggestion"],
+                        error_returned=err,
+                        code=code,
+                    )
 
                     code_to_run = self.generate_code(fix_error_prompt)
 
@@ -205,7 +232,9 @@ class AIAnalyse:
             try:
                 json.loads(captured_output)
             except Exception as err:
-                utils.log(f"Unable to parse the output: {captured_output}, error: {err}")
+                utils.log(
+                    f"Unable to parse the output: {captured_output}, error: {err}"
+                )
                 values = re.findall(r"=.(\{[\s\S]*?);", captured_output)
                 captured_output = values[0] if values else ""
             finally:
@@ -225,9 +254,20 @@ class AIAnalyse:
                 last_node = ast.parse(last_line).body[0]
                 if isinstance(last_node, ast.Assign) and last_node.targets:
                     last_line = last_node.targets[0].id
-                elif isinstance(last_node, ast.Expr) and isinstance(last_node.value, ast.Call) and isinstance(last_node.value.func, ast.Attribute) and last_node.value.func.attr == 'render_notebook':
+                elif (
+                    isinstance(last_node, ast.Expr)
+                    and isinstance(last_node.value, ast.Call)
+                    and isinstance(last_node.value.func, ast.Attribute)
+                    and last_node.value.func.attr == "render_notebook"
+                ):
                     try:
-                        value = eval(compile(ast.Expression(last_node.value.args[0]), '<string>', 'eval'))
+                        value = eval(
+                            compile(
+                                ast.Expression(last_node.value.args[0]),
+                                "<string>",
+                                "eval",
+                            )
+                        )
                     except Exception as err:
                         notebook_data = eval(last_line, environment).data
                         value = re.findall(r"=.(\{[\s\S]*?);", notebook_data)
@@ -267,7 +307,10 @@ class AIAnalyse:
         return suggestions
 
     def _get_description(self, description_response):
-        description_pattern = regex.compile(rf"{DESCRIPTION_START}([\s\S]*?)({DESCRIPTION_END}|{DESCRIPTION_END.replace('<','</')})", re.DOTALL)
+        description_pattern = regex.compile(
+            rf"{DESCRIPTION_START}([\s\S]*?)({DESCRIPTION_END}|{DESCRIPTION_END.replace('<','</')})",
+            re.DOTALL,
+        )
         descriptions = description_pattern.search(description_response)
         if descriptions:
             descriptions = descriptions.group(1).strip()
@@ -309,7 +352,7 @@ class AIAnalyse:
             return False
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     client = AIAnalyse()
     df = pd.read_csv(os.path.join(ABS_PATH, "test/data/as_macro_cnbs.csv"), index_col=0)
     generater = client(data_frame=df)
