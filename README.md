@@ -21,5 +21,8 @@
 
 ![image](https://github.com/snjyor/Auto_Report/assets/58200965/378c816c-4fe9-46c6-a502-c807efc80ffe)
 
-
+由于作者工作原因，目前项目还不完善
+TODO:
+1.增加生成代码的运行兼容性
+2.补充更多图表样式的处理逻辑
 
