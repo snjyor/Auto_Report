@@ -8,18 +8,18 @@
 使用时，上传文件，并勾选是否需要显示代码和进行图表描述。
 这里用到的是使用pyechart生成图表，共代码可以复制到本地进行自己的优化和修改图表样式，以生成更符合自己的图表
 
-![image](https://github.com/snjyor/Auto_Report/assets/58200965/2c0c0cc5-4725-425e-9ab1-6a553d0e2650)
+![image1](README_files/use.png)
 
 ## 数据分析示例
-![image](https://github.com/snjyor/Auto_Report/assets/58200965/0559c072-b418-480d-89a3-12d4e4730612)
+![image](README_files/1.png)
 
-![image](https://github.com/snjyor/Auto_Report/assets/58200965/73920ed7-c023-4c0d-ae52-07641611f928)
+![image](README_files/2.png)
 
-![image](https://github.com/snjyor/Auto_Report/assets/58200965/09023690-59e5-499a-b99b-c723622c1ff5)
+![image](README_files/3.png)
 
-![image](https://github.com/snjyor/Auto_Report/assets/58200965/6b5bc1bb-9c86-4f8f-918e-b117f6fdcd5c)
+![image](README_files/4.png)
 
-![image](https://github.com/snjyor/Auto_Report/assets/58200965/378c816c-4fe9-46c6-a502-c807efc80ffe)
+![image](README_files/5.png)
 
 由于作者工作原因，目前项目还不完善
 TODO:

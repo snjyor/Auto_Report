@@ -39,7 +39,6 @@ class StatsData:
             "kline": self._get_stats_data_from_kline_chart,
             "effectscatter": self._get_stats_data_from_effectscatter_chart,
             "lines": self._get_stats_data_from_lines_chart,
-            "effectscatter": self._get_stats_data_from_effectscatter_chart,
             "scatter3d": self._get_stats_data_from_scatter3d_chart,
             "bar3d": self._get_stats_data_from_bar3d_chart,
             "surface3d": self._get_stats_data_from_surface3d_chart,
