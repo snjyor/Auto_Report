@@ -6,6 +6,7 @@ from pathlib import Path
 import pandas as pd
 import streamlit as st
 from streamlit_echarts import st_echarts
+import openai
 
 ABS_PATH = Path(__file__).parent.absolute()
 sys.path.append(str(ABS_PATH))
@@ -19,7 +20,13 @@ from analyse.stats_data import get_stats_data
 class AiDataAnalysisFrontend(AIAnalyse):
     def __init__(self):
         super().__init__()
+        st.sidebar.title("AI Data Analysis")
         st.set_page_config(page_title="Auto Data Analysis", page_icon="📊", layout="wide")
+        self.azure_ai = st.sidebar.checkbox("AzureOpenAI", value=False, key="azure_ai")
+        self.openai_api_key = st.sidebar.checkbox("OpenAI Api Key", value=False, key="openai_api_key")
+        self.azure_api_key = st.sidebar.text_input("Azure Api Key", value="")
+        self.azure_endpoint = st.sidebar.text_input("Azure Endpoint", value="")
+        self.azure_version = st.sidebar.text_input("Azure Version", value="v1")
         st.markdown('<h1 style="text-align: center;">AI Data Analysis</h1>', unsafe_allow_html=True)
 
     def report_demo(self):
@@ -77,6 +84,16 @@ class AiDataAnalysisFrontend(AIAnalyse):
             highlight_prompt = self.prompts.generate_highlight_prompt()
             print("建议生成中...")
             if start_analysis:
+                if self.azure_ai:
+                    assert self.azure_api_key, "Azure Api Key 不能为空"
+                    assert self.azure_endpoint, "Azure Endpoint 不能为空"
+                    assert self.azure_version, "Azure Version 不能为空"
+                    openai.api_key = self.azure_api_key
+                    openai.api_base = self.azure_endpoint
+                    openai.api_version = self.azure_version
+                else:
+                    assert self.openai_api_key, "OpenAI Api Key 不能为空"
+                    openai.api_key = self.openai_api_key
                 with st.spinner("正在根据您的数据生成数据分析建议……"):
                     highlight_response = utils.gpt(highlight_prompt)
                     suggestions_list = self._get_suggestion(highlight_response)
