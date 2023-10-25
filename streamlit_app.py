@@ -10,7 +10,7 @@ import openai
 
 ABS_PATH = Path(__file__).parent.absolute()
 sys.path.append(str(ABS_PATH))
-
+from configs import configs as cfg
 from prompts import Prompts
 from utils import utils
 from analyse.ai_analyse import AIAnalyse
@@ -96,6 +96,7 @@ class AiDataAnalysisFrontend(AIAnalyse):
                     openai.api_version = self.azure_version
                 else:
                     assert self.openai_api_key, "OpenAI Api Key 不能为空"
+                    cfg.USE_AZURE_AI = False
                     openai.api_key = self.openai_api_key_text
                 with st.spinner("正在根据您的数据生成数据分析建议……"):
                     highlight_response = utils.gpt(highlight_prompt)
