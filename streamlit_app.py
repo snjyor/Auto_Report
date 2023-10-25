@@ -20,8 +20,8 @@ from analyse.stats_data import get_stats_data
 class AiDataAnalysisFrontend(AIAnalyse):
     def __init__(self):
         super().__init__()
-        st.sidebar.title("AI Data Analysis")
         st.set_page_config(page_title="Auto Data Analysis", page_icon="📊", layout="wide")
+        st.sidebar.title("AI Data Analysis")
         self.azure_ai = st.sidebar.checkbox("AzureOpenAI", value=False, key="azure_ai")
         self.openai_api_key = st.sidebar.checkbox("OpenAI Api Key", value=False, key="openai_api_key")
         self.azure_api_key = st.sidebar.text_input("Azure Api Key", value="")
