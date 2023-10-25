@@ -22,10 +22,12 @@ class AiDataAnalysisFrontend(AIAnalyse):
         super().__init__()
         st.set_page_config(page_title="Auto Data Analysis", page_icon="📊", layout="wide")
         st.sidebar.title("AI Data Analysis")
+
         self.azure_ai = st.sidebar.checkbox("AzureOpenAI", value=False, key="azure_ai")
         self.azure_api_key = st.sidebar.text_input("Azure Api Key", value="")
         self.azure_endpoint = st.sidebar.text_input("Azure Endpoint", value="")
         self.azure_version = st.sidebar.text_input("Azure Version", value="")
+
         self.openai_api_key = st.sidebar.checkbox("OpenAI Api Key", value=True, key="openai_api_key")
         self.openai_api_key_text = st.sidebar.text_input("OpenAI Api Key", value="")
         st.markdown('<h1 style="text-align: center;">AI Data Analysis</h1>', unsafe_allow_html=True)
@@ -94,7 +96,7 @@ class AiDataAnalysisFrontend(AIAnalyse):
                     openai.api_version = self.azure_version
                 else:
                     assert self.openai_api_key, "OpenAI Api Key 不能为空"
-                    openai.api_key = self.openai_api_key
+                    openai.api_key = self.openai_api_key_text
                 with st.spinner("正在根据您的数据生成数据分析建议……"):
                     highlight_response = utils.gpt(highlight_prompt)
                     suggestions_list = self._get_suggestion(highlight_response)
